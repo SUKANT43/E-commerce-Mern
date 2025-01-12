@@ -1,27 +1,58 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { NavBar } from './NavBar';
+import axios from 'axios'; // For making API requests
 
 export function Add() {
     const navigate = useNavigate();
-    const [image, setImage] = useState(null);
-    const [category, setCategory] = useState("");  // State to hold the selected category
+    const [productName, setProductName] = useState("");
+    const [productDescription, setProductDescription] = useState("");
+    const [originalPrice, setOriginalPrice] = useState("");
+    const [offerPrice, setOfferPrice] = useState("");
+    const [category, setCategory] = useState(""); // Category state
+    const [image, setImage] = useState(null); // For storing selected file
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImage(URL.createObjectURL(file));
+            setImage(file); // Save the file object to state
         }
     };
 
     const handleCategoryChange = (e) => {
-        setCategory(e.target.value);  // Update category state when selected
+        setCategory(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form submitted with category:", category);
-        // Handle form submission logic
+
+        if (!productName || !productDescription || !originalPrice || !offerPrice || !category || !image) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Create a FormData object to send text and file data
+        const formData = new FormData();
+        formData.append("EnterProductName", productName);
+        formData.append("EnterProductDescription", productDescription);
+        formData.append("OriginalPrice", originalPrice);
+        formData.append("OfferPrice", offerPrice);
+        formData.append("SelectCategory", category);
+        formData.append("Image", image);
+
+        try {
+            const response = await axios.post("http://localhost:5500/data", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            console.log("Server response:", response.data);
+            alert("Product added successfully!");
+            navigate("/"); // Navigate to another page after successful submission
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("Failed to add product. Please try again.");
+        }
     };
 
     return (
@@ -34,25 +65,32 @@ export function Add() {
                     <input
                         type="text"
                         placeholder="Enter Product Name"
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <input
                         type="text"
                         placeholder="Enter Product Description"
+                        value={productDescription}
+                        onChange={(e) => setProductDescription(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <input
                         type="number"
                         placeholder="Original Price"
+                        value={originalPrice}
+                        onChange={(e) => setOriginalPrice(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <input
                         type="number"
                         placeholder="Offer Price"
+                        value={offerPrice}
+                        onChange={(e) => setOfferPrice(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
 
-                    {/* Category Dropdown */}
                     <div className="w-full">
                         <label htmlFor="category" className="block text-gray-700 font-medium mb-2">
                             Select Category
@@ -79,7 +117,7 @@ export function Add() {
                         />
                         {image && (
                             <img
-                                src={image}
+                                src={URL.createObjectURL(image)}
                                 alt="Selected Product"
                                 className="mt-4 h-40 w-40 object-cover rounded-lg"
                             />
