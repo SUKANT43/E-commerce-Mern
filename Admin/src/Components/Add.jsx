@@ -48,7 +48,12 @@ export function Add() {
             });
             console.log("Server response:", response.data);
             alert("Product added successfully!");
-            navigate("/"); // Navigate to another page after successful submission
+           setProductName("")
+           setProductDescription("")
+           setOfferPrice("")
+           setOriginalPrice("")
+           setCategory("")
+           setImage("")
         } catch (error) {
             console.error("Error submitting form:", error);
             alert("Failed to add product. Please try again.");
