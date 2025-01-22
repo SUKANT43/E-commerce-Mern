@@ -127,6 +127,51 @@ app.get('/products', (req, res) => {
       });
 });
   
+// Route to update a product
+app.put('/product/:id', upload.single("Image"), async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Find the existing product
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Get updated fields from the request body
+    const {
+      EnterProductName,
+      EnterProductDescription,
+      OriginalPrice,
+      OfferPrice,
+      SelectCategory,
+    } = req.body;
+
+    // Update fields if provided
+    if (EnterProductName) product.EnterProductName = EnterProductName;
+    if (EnterProductDescription) product.EnterProductDescription = EnterProductDescription;
+    if (OriginalPrice) product.OriginalPrice = OriginalPrice;
+    if (OfferPrice) product.OfferPrice = OfferPrice;
+    if (SelectCategory) product.SelectCategory = SelectCategory;
+
+    // If a new image is uploaded, replace the existing one
+    if (req.file) {
+      product.Image = req.file.filename; // Update with the new image filename
+    }
+
+    // Save the updated product to the database
+    const updatedProduct = await product.save();
+
+    res.json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating product", error: error.message });
+  }
+});
+
 // Route to delete a product
 app.delete('/product/:id', (req, res) => {
     const productId = req.params.id;
