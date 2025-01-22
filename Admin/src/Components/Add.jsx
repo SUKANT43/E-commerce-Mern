@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { NavBar } from './NavBar';
 import axios from 'axios'; // For making API requests
-
+//edweew helllekd
 export function Add() {
     const navigate = useNavigate();
     const [productName, setProductName] = useState("");
