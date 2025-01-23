@@ -4,7 +4,7 @@ import { NavBar } from './NavBar';
 import axios from 'axios'; // For making API requests
 export function Add() {
     const navigate = useNavigate();
-    const [productName, setProductName] = useState("");
+    const [productName, setProductName] = useState("");//for set product
     const [productDescription, setProductDescription] = useState("");
     const [originalPrice, setOriginalPrice] = useState("");
     const [offerPrice, setOfferPrice] = useState("");
