@@ -4,12 +4,12 @@ import { NavBar } from './NavBar';
 import axios from 'axios'; // For making API requests
 export function Add() {
     const navigate = useNavigate();
-    const [productName, setProductName] = useState("");//for set product
+    const [productName, setProductName] = useState("");t
     const [productDescription, setProductDescription] = useState("");
     const [originalPrice, setOriginalPrice] = useState("");
     const [offerPrice, setOfferPrice] = useState("");
-    const [category, setCategory] = useState(""); // Category state
-    const [image, setImage] = useState(null); // For storing selected file
+    const [category, setCategory] = useState(""); 
+    const [image, setImage] = useState(null); 
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
