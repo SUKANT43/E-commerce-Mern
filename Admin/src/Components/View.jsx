@@ -102,11 +102,14 @@ export function View() {
                 key={product._id}
                 className="bg-white rounded-lg shadow-md p-4 flex flex-col"
               >
+                <center>
                 <img
                   src={`http://localhost:5500/uploads/${product.Image}`}
                   alt={product.EnterProductName}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
+                  className="w-48 h-64 object-cover rounded-md mt-6 mb-6"
+                  />
+</center>
+
                 <h2 className="font-semibold text-lg mb-2 text-center">
                   {product.EnterProductName}
                 </h2>
