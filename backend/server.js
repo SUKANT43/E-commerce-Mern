@@ -10,7 +10,10 @@ app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded request bodies
 
 const PORT = 5500;
-
+app.use((req,res,next)=>{
+  console.log(req.path,req.method)
+  next()
+})
 mongoose
   .connect("mongodb://localhost:27017/e-commerce")
   .then(() => {
