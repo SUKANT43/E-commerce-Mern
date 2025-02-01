@@ -7,7 +7,7 @@ export function NavBar() {
     const [isNavOpen, setIsNavOpen] = useState(false);
 
     const toggleNav = () => {
-        setIsNavOpen(!isNavOpen); // Toggle the state of the nav bar
+        setIsNavOpen(!isNavOpen); 
     };
 
     return (
