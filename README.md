@@ -27,12 +27,7 @@ This project is an e-commerce platform built using the MERN stack (MongoDB, Expr
 - **Frontend**: React.js, HTML, CSS, JavaScript
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
-- **Deployment**: Render (for hosting frontend and backend)
 
-## Live Demo
-
-- **User Frontend**: [E-commerce Platform Frontend](https://e-commerce-platform-frontend-1.onrender.com)
-- **Admin Panel**: [E-commerce Platform Admin](https://e-commerce-platform-admin.onrender.com)
 
 ## Getting Started
 
@@ -44,9 +39,3 @@ To get a local copy up and running, follow these simple steps.
 - MongoDB database set up
 - Git installed
 
-### Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone <your-repository-url>
