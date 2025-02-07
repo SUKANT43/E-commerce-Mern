@@ -1,0 +1,95 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #dbeafe;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 450px;
+}
+
+/* Increased width */
+.login-box {
+    background-color: white;
+    padding: 30px; /* Increased padding */
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+    width: 500px; /* Increased width */
+    max-width: 90%; /* Prevents it from becoming too large on big screens */
+    text-align: center;
+}
+
+/* Logo */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    height: 120px; /* Slightly increased */
+    width: auto;
+    border-radius: 50%;
+}
+
+/* Title */
+.title {
+    font-size: 24px; /* Slightly increased */
+    font-weight: bold;
+    color: #4f46e5;
+    margin-bottom: 25px;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 20px; /* Increased spacing */
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 16px; /* Increased font size */
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px; /* Increased font size */
+}
+
+/* Button */
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px; /* Slightly larger */
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.login-button:hover {
+    background-color: #4338ca;
+}
+
+/* Error Message */
+.error-text {
+    color: red;
+    font-size: 15px; /* Slightly increased */
+    margin-top: 12px;
+}
