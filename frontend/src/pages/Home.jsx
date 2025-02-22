@@ -78,7 +78,7 @@ function Home() {
   const navigate = useNavigate();
 
   function handleClick(){
-    navigate('/product-page cursor-pointer')
+    navigate('/product-page')
   }
 
   return (
@@ -141,7 +141,8 @@ function Home() {
         <h1 className="text-2xl font-bold mb-6">Welcome to Our Store</h1>
         
         {/* Product Grid */}
-        <div className="grid grid-cols-4 gap-6" onClick={handleClick}>
+        <div className="">
+        <div className="grid grid-cols-4 gap-6 cursor-pointer" onClick={handleClick}>
           {products.map((product) => (
             <div key={product.id} className="bg-white p-4 rounded-lg shadow-md relative">
               {product.tag && (
@@ -172,7 +173,7 @@ function Home() {
             </div>
           ))}
         </div>
-
+        </div>
         <button className="mt-6 bg-red-500 text-white px-6 py-2 rounded-md">
           View All Products
         </button>
