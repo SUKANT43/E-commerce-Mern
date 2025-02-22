@@ -25,11 +25,10 @@ function NavBar() {
         </div>
 
         <div className={`absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none md:flex gap-8 text-lg font-semibold px-4 md:px-0 transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}>
-          <h1 className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Home</h1>
+          <Link to="/" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Home</Link>
           <h1 className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Contact</h1>
           <h1 className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">About</h1>
-          <Link to="/user-login" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">User Sign In</Link>
-          <Link to="/seller-login" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Seller Sign In</Link>
+          <Link to="/user-login" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Sign In</Link>
 
 
         </div>
@@ -44,8 +43,9 @@ function NavBar() {
         </div>
 
         <div className="hidden md:flex items-center gap-6 md:gap-8 text-xl md:text-2xl">
-          <FaHeart className="text-red-500 cursor-pointer" />
-          <FaShoppingCart className="text-blue-500 cursor-pointer" />
+         <Link to="/like"><FaHeart className="text-red-500 cursor-pointer" /></Link> 
+          <Link to="/cart"><FaShoppingCart className="text-blue-500 cursor-pointer" /></Link>
+          
           <FaUserCircle className="text-gray-600 cursor-pointer" />
         </div>
       </div>
