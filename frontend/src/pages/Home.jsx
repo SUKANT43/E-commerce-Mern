@@ -109,7 +109,7 @@ function Home() {
 
   // Handle product click
   const handleClick = (productId) => {
-    navigate(`/product-page/${productId}`);
+    navigate(`/product-page`);
   };
 
   // Display products (filtered or all)
@@ -191,7 +191,7 @@ function Home() {
             <div
               key={product.id}
               className="bg-white p-4 rounded-lg shadow-md relative cursor-pointer"
-              onClick={() => handleClick(product.id)}
+              onClick={handleClick}
             >
               <img
                 src={product.image}
