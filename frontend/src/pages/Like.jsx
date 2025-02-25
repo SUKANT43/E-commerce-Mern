@@ -55,7 +55,6 @@ function Like() {
           </tbody>
         </table>
 
-        {/* Return to Shop Button */}
         <div className="flex justify-between items-center mt-6">
           <button className="border px-4 py-2 rounded-lg cursor-pointer">
             <Link to="/">Return to Shop</Link>
