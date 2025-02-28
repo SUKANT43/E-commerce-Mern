@@ -5,6 +5,8 @@ const dotenv=require('dotenv').config()
 const db=require('./config/db')
 const PORT=process.env.PORT||2005
 const sellerLogin=require('./routes/sellerLoginRoute')
+
+app.use(express.json())
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     next();
