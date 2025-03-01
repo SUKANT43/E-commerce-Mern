@@ -15,7 +15,7 @@ function adminSignup() {
       e.preventDefault()
       try{
         
-        const userData=await axios.post('http://localhost:2005/api/userLogin/register',data)
+        const userData=await axios.post('http://localhost:2005/api/sellerLogin/register',data)
         if(userData){
           setData(
             {

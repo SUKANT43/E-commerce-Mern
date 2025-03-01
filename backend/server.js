@@ -5,15 +5,15 @@ const dotenv=require('dotenv').config()
 const db=require('./config/db')
 const PORT=process.env.PORT||2005
 const sellerLogin=require('./routes/sellerLoginRoute')
-
+const userLogin=require('./routes/userLoginRoutes')
 app.use(express.json())
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     next();
 });
 app.use(cors())
-app.use('/api/userLogin',sellerLogin)
-
+app.use('/api/sellerLogin',sellerLogin)
+app.use('/api/userLogin',userLogin)
 
 app.listen(PORT,()=>{
     db()

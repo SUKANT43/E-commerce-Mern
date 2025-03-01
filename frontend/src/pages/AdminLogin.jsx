@@ -12,7 +12,7 @@ const navigate=useNavigate()
 const handleSubmit=async(e)=>{
       e.preventDefault()
       try{
-         const log=await axios.post('http://localhost:2005/api/userLogin/login',data)
+         const log=await axios.post('http://localhost:2005/api/sellerLogin/login',data)
          localStorage.setItem("token", log.data.token);
 
          alert("Login Successful");
