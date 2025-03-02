@@ -1,4 +1,4 @@
-const sellerLoginModel=require('../model/sellerLoginModel')
+const sellerLoginModel=require('../model/userModel')
 const jwt=require('jsonwebtoken')
 const bcrypt=require('bcryptjs')
 const register=async(req,res)=>{
@@ -54,7 +54,19 @@ const login=async(req,res)=>{
     }
 }
 
-const me=(req,res)=>{
+const me=async(req,res)=>{
+    try{
+         const{id,name,email,password}=await sellerLoginModel.findOne(req.user.id)
+        return res.status(200).json({
+            id,
+            name,
+            email,
+            password
+        })
+    }
+    catch(e){
+        return res.status(400).json({err:e.message})
+    }
 
 }
 
