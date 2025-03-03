@@ -70,8 +70,34 @@ const me=async(req,res)=>{
 
 }
 
-const changePassword=(req,res)=>{
+const changePassword=async(req,res)=>{
+        try{
+            const{email,password,newPassword}=req.body
+            if(!email || !password ||!newPassword){
+                return res.status(200).json({msg:"please enter all fields"})
+            }
+            const checkUser=await sellerLoginModel.findById(req.user.id)
+            if(!checkUser){
+                return res.status(200).json({msg:"User not found."})
+            }
+            if(checkUser.email!=email){
+                return res.status(200).json({msg:"email and token not matches"})
+            }
+            const checkPassword=await bcrypt.compare(password,checkUser.password)
+            if(!checkPassword){
+                return res.status(200).json({msg:"enter correct password"})
+            }
+            const salt=await bcrypt.genSalt(10)
+            const hashedPassword=await bcrypt.hash(newPassword,salt)
+            const updatedUser=await sellerLoginModel.findByIdAndUpdate(req.params.id,
+                {password:hashedPassword},
+                {new:true}
+            )
 
+        }
+        catch(e){
+            return res.status(400).json({err:e.message})
+        }
 }
 
 
