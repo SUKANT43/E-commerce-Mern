@@ -56,7 +56,7 @@ const login=async(req,res)=>{
 
 const me=async(req,res)=>{
     try{
-         const{id,name,email,password}=await sellerLoginModel.findOne(req.user.id)
+         const{id,name,email,password}=await sellerLoginModel.findById(req.user.id)
         return res.status(200).json({
             id,
             name,
@@ -65,7 +65,7 @@ const me=async(req,res)=>{
         })
     }
     catch(e){
-        return res.status(400).json({err:e.message})
+        return res.status(500).json({err:e.message})
     }
 
 }
@@ -89,10 +89,14 @@ const changePassword=async(req,res)=>{
             }
             const salt=await bcrypt.genSalt(10)
             const hashedPassword=await bcrypt.hash(newPassword,salt)
-            const updatedUser=await sellerLoginModel.findByIdAndUpdate(req.params.id,
+            const updatedUser=await sellerLoginModel.findByIdAndUpdate(checkUser.id,
                 {password:hashedPassword},
                 {new:true}
             )
+            return res.status(200).json({
+                msg:"new Password updated successfully",
+                updatedUser
+            })
 
         }
         catch(e){
