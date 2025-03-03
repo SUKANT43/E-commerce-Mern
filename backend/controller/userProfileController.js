@@ -27,7 +27,12 @@ const newUserData=async(req,res)=>{
 
 const editUserData=async(req,res)=>{
     try{
-        return res.status(400).json({msg:req.user.id})
+        const {doorNo,street,city,district,state}=req.body
+        if(!doorNo || !street||!city||!district||!state){
+         res.status(200).json({msg:"please enter all fields"})
+        }
+        const updateData=await userLoginModel.findOneAndUpdate({userId:req.user.id},{doorNo,street,city,state},{new:true})
+        res.status(200).json({updateData})
     }
     catch(e){
         return res.status(400).json({err:e.message})
