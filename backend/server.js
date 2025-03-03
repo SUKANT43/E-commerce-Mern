@@ -6,6 +6,7 @@ const db=require('./config/db')
 const PORT=process.env.PORT||2005
 const sellerLogin=require('./routes/sellerLoginRoute')
 const userLogin=require('./routes/userLoginRoutes')
+const userProfile=require('./routes/userProfileRoute')
 app.use(express.json())
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use('/api/sellerLogin',sellerLogin)
 app.use('/api/userLogin',userLogin)
+app.use('/api/userProfile',userProfile)
 
 app.listen(PORT,()=>{
     db()
