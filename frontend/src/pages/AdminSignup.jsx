@@ -17,7 +17,6 @@ function AdminSignup() {
     setError('');
     setSuccess('');
 
-    // Password Validation
     if (data.password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
