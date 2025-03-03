@@ -1,114 +1,121 @@
-const sellerLoginModel=require('../model/userModel')
-const jwt=require('jsonwebtoken')
-const bcrypt=require('bcryptjs')
-const register=async(req,res)=>{
-    try{
-        const{name,email,password}=req.body
-        if(!name||!email||!password){
-           return res.status(200).json({msg:"please enter all fields"})
+const sellerLoginModel = require('../model/userModel');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+const register = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({ msg: "Please enter all fields" });
         }
-        const isEmailAlreadyExist=await sellerLoginModel.findOne({email})
-        if(isEmailAlreadyExist){
-            return res.status(200).json({msg:"user already exist"})
+
+        const isEmailAlreadyExist = await sellerLoginModel.findOne({ email });
+        if (isEmailAlreadyExist) {
+            return res.status(409).json({ msg: "User already exists" }); // 409 Conflict
         }
-        const salt=await bcrypt.genSalt(10)
-        const hashedPassword=await bcrypt.hash(password,salt)
-        const newUser=await sellerLoginModel.create({
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await sellerLoginModel.create({
             name,
             email,
-            password:hashedPassword
-        })
-        return res.status(200).json({newUser})
-    }
-    catch(e){
-        return res.status(400).json({msg:e.message})
-    }
-}
+            password: hashedPassword
+        });
 
-const login=async(req,res)=>{
-    try{
-       const{email,password}=req.body
-       if(!email||!password){
-          return res.status(200).json({msg:"please enter all fields"})
-       }
-       const isUser=await sellerLoginModel.findOne({email})
-       if(!isUser){
-        return res.status(200).json({msg:"No user found first go and register"})
-       }
-       const comparePassword=await bcrypt.compare(password,isUser.password)
-       if(!comparePassword){
-        return res.status(200).json({msg:'please enter correct password'})
-       }
-
-       return res.status(200).json({
-        msg:"login successfully",
-        name:isUser.name,
-        email:isUser.email,
-        password:isUser.password,
-        token:createJWT(isUser.id)
-       })
+        return res.status(201).json({
+            msg: "User registered successfully",
+            user: {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email
+            }
+        });
+    } catch (e) {
+        return res.status(500).json({ msg: e.message });
     }
-    
-    catch(e){
-       return res.status(400).json({msg:e.message})
-    }
-}
+};
 
-const me=async(req,res)=>{
-    try{
-         const{id,name,email,password}=await sellerLoginModel.findById(req.user.id)
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ msg: "Please enter all fields" });
+        }
+
+        const user = await sellerLoginModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ msg: "No user found, please register first" });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ msg: "Incorrect password" });
+        }
+
         return res.status(200).json({
-            id,
-            name,
-            email,
-            password
-        })
+            msg: "Login successful",
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            },
+            token: createJWT(user.id)
+        });
+    } catch (e) {
+        return res.status(500).json({ msg: e.message });
     }
-    catch(e){
-        return res.status(500).json({err:e.message})
+};
+
+const me = async (req, res) => {
+    try {
+        const user = await sellerLoginModel.findById(req.user.id).select("-password");
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+        return res.status(200).json(user);
+    } catch (e) {
+        return res.status(500).json({ msg: e.message });
     }
+};
 
-}
+const changePassword = async (req, res) => {
+    try {
+        const { email, password, newPassword } = req.body;
 
-const changePassword=async(req,res)=>{
-        try{
-            const{email,password,newPassword}=req.body
-            if(!email || !password ||!newPassword){
-                return res.status(200).json({msg:"please enter all fields"})
-            }
-            const checkUser=await sellerLoginModel.findById(req.user.id)
-            if(!checkUser){
-                return res.status(200).json({msg:"User not found."})
-            }
-            if(checkUser.email!=email){
-                return res.status(200).json({msg:"email and token not matches"})
-            }
-            const checkPassword=await bcrypt.compare(password,checkUser.password)
-            if(!checkPassword){
-                return res.status(200).json({msg:"enter correct password"})
-            }
-            const salt=await bcrypt.genSalt(10)
-            const hashedPassword=await bcrypt.hash(newPassword,salt)
-            const updatedUser=await sellerLoginModel.findByIdAndUpdate(checkUser.id,
-                {password:hashedPassword},
-                {new:true}
-            )
-            return res.status(200).json({
-                msg:"new Password updated successfully",
-                updatedUser
-            })
-
+        if (!email || !password || !newPassword) {
+            return res.status(400).json({ msg: "Please enter all fields" });
         }
-        catch(e){
-            return res.status(400).json({err:e.message})
+
+        const user = await sellerLoginModel.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
         }
-}
 
+        if (user.email !== email) {
+            return res.status(403).json({ msg: "Email and token do not match" });
+        }
 
-const createJWT=(id)=>{
-        return jwt.sign({id},process.env.JWT_SECRET,{
-            expiresIn:'30D'
-        })
-}
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ msg: "Incorrect password" });
+        }
 
-module.exports={register,login,me,changePassword}
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+        await user.save();
+
+        return res.status(200).json({ msg: "Password updated successfully" });
+    } catch (e) {
+        return res.status(500).json({ msg: e.message });
+    }
+};
+
+const createJWT = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d'
+    });
+};
+
+module.exports = { register, login, me, changePassword };
