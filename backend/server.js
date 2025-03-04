@@ -7,6 +7,7 @@ const PORT=process.env.PORT||2005
 const sellerLogin=require('./routes/sellerLoginRoute')
 const userLogin=require('./routes/userLoginRoutes')
 const userProfile=require('./routes/userProfileRoute')
+const sellerProductUpload=require('./routes/sellerProductUploadRoute')
 app.use(express.json())
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
@@ -16,7 +17,7 @@ app.use(cors())
 app.use('/api/sellerLogin',sellerLogin)
 app.use('/api/userLogin',userLogin)
 app.use('/api/userProfile',userProfile)
-
+app.use('/api/sellerProductUpload',sellerProductUpload)
 app.listen(PORT,()=>{
     db()
     console.log("server is connected to:"+PORT)
