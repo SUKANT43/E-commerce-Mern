@@ -1,6 +1,6 @@
 const productUpload=async(req,res)=>{
     try{
-        res.status(200).json({msg:'hi'})
+        const{productName,productDescription,productCategory,productOriginalPrice,productOfferPrice,productImage}=req.body
     }
     catch(e){
         res.status(400).json({err:e.message})
