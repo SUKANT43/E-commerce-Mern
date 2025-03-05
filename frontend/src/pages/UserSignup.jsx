@@ -42,7 +42,7 @@ function userSignup() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center">Create an account</h2>
+        <h2 className="text-2xl font-semibold text-center">Create an account for User</h2>
         <p className="text-gray-500 text-center mb-4">Enter your details below</p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}

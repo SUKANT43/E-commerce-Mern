@@ -35,7 +35,7 @@ function AdminLogin() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center">Sign In</h2>
+        <h2 className="text-2xl font-semibold text-center">Seller Sign In</h2>
         <p className="text-gray-500 text-center mb-4">Enter your details below</p>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
