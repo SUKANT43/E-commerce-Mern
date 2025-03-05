@@ -8,6 +8,6 @@ router.post('/login',login)
 
 router.get('/me',protect,me)
 
-router.put('/c-password',protect,changePassword)
+router.put('/c-password',changePassword)
 
 module.exports=router

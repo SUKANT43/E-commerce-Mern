@@ -5,7 +5,7 @@ const{protect}=require('../middleWare/userLoginMIddleWare')
 router.post('/register',register)
 router.post('/login',login)
 router.get('/me',protect,me)
-router.put('/changePassword',protect,changePassword)
+router.put('/changePassword',changePassword)
 
 
 module.exports=router

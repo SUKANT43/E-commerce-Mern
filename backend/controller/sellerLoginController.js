@@ -70,36 +70,32 @@ const me = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-    try {
-        const { email, password, newPassword } = req.body;
-        if (!email || !password || !newPassword) {
-            return res.status(400).json({ msg: "Please enter all fields" });
-        }
-
-        const findUser = await sellerLogin.findOne({ email });
-        if (!findUser) {
-            return res.status(404).json({ msg: "User not found" });
-        }
-
-        if (findUser.id != req.user.id) {
-            return res.status(403).json({ msg: "JWT token does not match the email" });
-        }
-
-        const passCheck = await bcrypt.compare(password, findUser.password);
-        if (!passCheck) {
-            return res.status(401).json({ msg: "Incorrect password" });
-        }
-
-        const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(newPassword, salt);
-        await sellerLogin.findByIdAndUpdate(findUser.id, { password: hashPassword });
-
-        return res.status(200).json({ msg: "Password updated successfully" });
-
-    } catch (e) {
-        return res.status(500).json({ error: e.message });
-    }
-};
+        try {
+            const { email, password, newPassword } = req.body;
+    
+            if (!email || !password || !newPassword) {
+                return res.status(400).json({ msg: "Please enter all fields" });
+            }
+    
+            const user = await sellerLogin.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ msg: "User not found" });
+            }
+    
+            const isPasswordCorrect = await bcrypt.compare(password, user.password);
+            if (!isPasswordCorrect) {
+                return res.status(401).json({ msg: "Incorrect password" });
+            }
+    
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+            const changedPassword=await sellerLogin.findByIdAndUpdate(req.params.id,{password:hashedNewPassword},{new:true})
+    
+            return res.status(200).json({ msg: "Password updated successfully" });
+        } catch (e) {
+            return res.status(500).json({ msg: e.message });
+        
+}
+}
 
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {

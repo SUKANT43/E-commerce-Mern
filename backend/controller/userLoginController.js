@@ -80,6 +80,8 @@ const me = async (req, res) => {
     }
 };
 
+
+
 const changePassword = async (req, res) => {
     try {
         const { email, password, newPassword } = req.body;
@@ -88,13 +90,9 @@ const changePassword = async (req, res) => {
             return res.status(400).json({ msg: "Please enter all fields" });
         }
 
-        const user = await sellerLoginModel.findById(req.user.id);
+        const user = await sellerLoginModel.findOne({ email });
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
-        }
-
-        if (user.email !== email) {
-            return res.status(403).json({ msg: "Email and token do not match" });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -103,14 +101,14 @@ const changePassword = async (req, res) => {
         }
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-        user.password = hashedNewPassword;
-        await user.save();
+        const changedPassword=await sellerLoginModel.findByIdAndUpdate(req.params.id,{password:hashedNewPassword},{new:true})
 
         return res.status(200).json({ msg: "Password updated successfully" });
     } catch (e) {
         return res.status(500).json({ msg: e.message });
     }
 };
+
 
 const createJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
