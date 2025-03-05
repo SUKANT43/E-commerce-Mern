@@ -1,24 +1,46 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function UserResetPassword() {
   const [data, setData] = useState({
     email: "",
-    oldPassword: "",
+    password: "",
     newPassword: "",
-    confirmNewPassword: "",
   });
 
+  const [confirmNewPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Password Reset Successful");
-  };
+    
+    if (confirmNewPassword !== data.newPassword) {
+      setData({ ...data, newPassword: "" });
+      setConfirmPassword('');
+      return alert('Passwords do not match');
+    }
+    
+    try {
+      const response = await axios.put('http://localhost:2005/api/userLogin/changePassword', data);
+      if (response.data) {
+        setData({
+          email: "",
+          password: "",
+          newPassword: "",
+        });
+        setConfirmPassword('');
+        alert('Password reset successful!');
+        navigate("/seller-login"); 
+      }
+    } catch (e) {
+      alert(`Error: ${e.message}`); 
+    }
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -40,8 +62,8 @@ function UserResetPassword() {
             type="password"
             placeholder="Enter Old Password"
             className="w-full p-3 border border-gray-300 rounded-md"
-            name="oldPassword"
-            value={data.oldPassword}
+            name="password" // Corrected from "oldPassword" to "password"
+            value={data.password}
             onChange={handleChange}
             required
           />
@@ -59,8 +81,8 @@ function UserResetPassword() {
             placeholder="Confirm New Password"
             className="w-full p-3 border border-gray-300 rounded-md"
             name="confirmNewPassword"
-            value={data.confirmNewPassword}
-            onChange={handleChange}
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
 
@@ -70,7 +92,7 @@ function UserResetPassword() {
         </form>
 
         <p className="text-gray-500 text-center mt-4">
-          Login? <span className="text-gray-800 font-semibold cursor-pointer" onClick={() => navigate("/user-login")}>Login</span>
+          Login? <span className="text-gray-800 font-semibold cursor-pointer" onClick={() => navigate("/seller-login")}>Login</span>
         </p>
       </div>
     </div>

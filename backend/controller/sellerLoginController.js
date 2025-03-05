@@ -70,32 +70,33 @@ const me = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-        try {
-            const { email, password, newPassword } = req.body;
-    
-            if (!email || !password || !newPassword) {
-                return res.status(400).json({ msg: "Please enter all fields" });
-            }
-    
-            const user = await sellerLogin.findOne({ email });
-            if (!user) {
-                return res.status(404).json({ msg: "User not found" });
-            }
-    
-            const isPasswordCorrect = await bcrypt.compare(password, user.password);
-            if (!isPasswordCorrect) {
-                return res.status(401).json({ msg: "Incorrect password" });
-            }
-    
-            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-            const changedPassword=await sellerLogin.findByIdAndUpdate(req.params.id,{password:hashedNewPassword},{new:true})
-    
-            return res.status(200).json({ msg: "Password updated successfully" });
-        } catch (e) {
-            return res.status(500).json({ msg: e.message });
-        
-}
-}
+    try {
+        const { email, password, newPassword } = req.body;
+
+        if (!email || !password || !newPassword) {
+            return res.status(400).json({ msg: "Please enter all fields" });
+        }
+
+        const user = await sellerLogin.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ msg: "Incorrect password" });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedNewPassword;
+        await user.save(); 
+
+        return res.status(200).json({ msg: "Password updated successfully" });
+    } catch (e) {
+        return res.status(500).json({ msg: e.message });
+    }
+};
 
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {

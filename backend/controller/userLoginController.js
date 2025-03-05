@@ -101,7 +101,9 @@ const changePassword = async (req, res) => {
         }
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-        const changedPassword=await sellerLoginModel.findByIdAndUpdate(req.params.id,{password:hashedNewPassword},{new:true})
+
+        user.password = hashedNewPassword;
+        await user.save();  
 
         return res.status(200).json({ msg: "Password updated successfully" });
     } catch (e) {
