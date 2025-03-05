@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import Like from "./pages/Like";
 import ProductPage from "./pages/ProductPage";
 import Demo from "./pages/demo";
+import SellerResetPassword from "./pages/sellerResetPassword";
+import UserResetPassword from "./pages/userResetPassword";
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +26,8 @@ function App() {
          <Route path="like" element={<Like/>}/>
          <Route path="product-page" element={<ProductPage/>}/>
          <Route path="demo" element={<Demo/>}/>
+         <Route path="seller-reset-password" element={<SellerResetPassword/>}/>
+         <Route path="user-reset-password" element={<UserResetPassword/>}/>
 
       </Routes>
      <Footer />

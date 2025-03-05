@@ -67,6 +67,9 @@ function UserLogin() {
         <p className="text-gray-500 text-center mt-4">
           Create an account? <Link to="/user-signup" className="text-gray-800 font-semibold">Create</Link>
         </p>
+        <p className="text-gray-500 text-center mt-4">
+          Reset password? <Link to="/user-reset-password" className="text-gray-800 font-semibold">Reset</Link>
+        </p>
       </div>
     </div>
   );
