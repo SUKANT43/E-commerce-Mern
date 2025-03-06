@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import UserLogin from "./pages/userLogin";
@@ -16,28 +16,44 @@ import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminView from "./pages/AdminView";
 import AdminOrder from "./pages/AdminOrder";
 import AdminShipping from "./pages/AdminShipping";
+
+function AppContent() {
+  const location = useLocation(); // useLocation() is now inside BrowserRouter
+
+  // Define routes where NavBar and Footer should be hidden
+  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping"];
+
+  return (
+    <>
+      {!adminRoutes.includes(location.pathname) && <NavBar />}
+
+      <Routes>
+        <Route path="user-login" element={<UserLogin />} />
+        <Route path="user-signup" element={<UserSignup />} />
+        <Route path="seller-login" element={<AdminLogin />} />
+        <Route path="seller-signup" element={<AdminSignup />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="/" element={<Home />} />
+        <Route path="like" element={<Like />} />
+        <Route path="product-page" element={<ProductPage />} />
+        <Route path="demo" element={<Demo />} />
+        <Route path="seller-reset-password" element={<SellerResetPassword />} />
+        <Route path="user-reset-password" element={<UserResetPassword />} />
+        <Route path="admin-add-product" element={<AdminAddProduct />} />
+        <Route path="admin-view" element={<AdminView />} />
+        <Route path="admin-order" element={<AdminOrder />} />
+        <Route path="admin-shipping" element={<AdminShipping />} />
+      </Routes>
+
+      {!adminRoutes.includes(location.pathname) && <Footer />}
+    </>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <NavBar />
-      <Routes>
-         <Route path="user-login" element={<UserLogin/>}/>
-         <Route path="user-signup" element={<UserSignup/>}/>
-         <Route path="seller-login" element={<AdminLogin/>}/>
-         <Route path="seller-signup" element={<AdminSignup/>}/>
-         <Route path="cart" element={<Cart/>}/>
-         <Route path="/" element={<Home/>}/>
-         <Route path="like" element={<Like/>}/>
-         <Route path="product-page" element={<ProductPage/>}/>
-         <Route path="demo" element={<Demo/>}/>
-         <Route path="seller-reset-password" element={<SellerResetPassword/>}/>
-         <Route path="user-reset-password" element={<UserResetPassword/>}/>
-         <Route path="admin/add/product" element={<AdminAddProduct/>}/>
-         <Route path="admin/view" element={<AdminView/>}/>
-         <Route path="admin/order" element={<AdminOrder/>}/>
-         <Route path="admin/shipping" element={<AdminShipping/>}/>
-</Routes>
-     <Footer />
+      <AppContent />
     </BrowserRouter>
   );
 }

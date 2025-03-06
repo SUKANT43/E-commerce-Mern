@@ -1,9 +1,9 @@
 import React from 'react'
-
+import SellerNavBar from '../components/SellerNavBar'
 function AdminAddProduct() {
   return (
     <div>
-      hi
+    <SellerNavBar/>
     </div>
   )
 }
