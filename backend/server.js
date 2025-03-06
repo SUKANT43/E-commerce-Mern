@@ -9,11 +9,11 @@ const userLogin=require('./routes/userLoginRoutes')
 const userProfile=require('./routes/userProfileRoute')
 const sellerProductUpload=require('./routes/sellerProductUploadRoute')
 app.use(express.json())
+app.use(cors())
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     next();
 });
-app.use(cors())
 app.use('/api/sellerLogin',sellerLogin)
 app.use('/api/userLogin',userLogin)
 app.use('/api/userProfile',userProfile)

@@ -17,16 +17,17 @@ import AdminView from "./pages/AdminView";
 import AdminOrder from "./pages/AdminOrder";
 import AdminShipping from "./pages/AdminShipping";
 import SellerNavBar from "./components/SellerNavBar";
-
+import ErrorBoundary from "./pages/ErrorBoundary";
+import EditProduct from "./pages/EditProduct";
 function AppContent() {
-  const location = useLocation(); 
+  const location = useLocation();
 
-  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping"];
+  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping", "/admin"];
 
   return (
     <>
       {!adminRoutes.includes(location.pathname) && <NavBar />}
-      {adminRoutes.includes(location.pathname)&&<SellerNavBar/>}
+      {adminRoutes.includes(location.pathname) && <SellerNavBar />}
 
       <Routes>
         <Route path="user-login" element={<UserLogin />} />
@@ -44,6 +45,8 @@ function AppContent() {
         <Route path="admin-view" element={<AdminView />} />
         <Route path="admin-order" element={<AdminOrder />} />
         <Route path="admin-shipping" element={<AdminShipping />} />
+        <Route path="/admin" element={<AdminView />} />
+        <Route path="/edit/:id" element={<EditProduct />} />
       </Routes>
 
       {!adminRoutes.includes(location.pathname) && <Footer />}
@@ -54,7 +57,9 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <ErrorBoundary>
+        <AppContent />
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

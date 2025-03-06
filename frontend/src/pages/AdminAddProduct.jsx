@@ -14,12 +14,10 @@ function AdminAddProduct() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle image upload
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -28,7 +26,6 @@ function AdminAddProduct() {
     }
   };
 
-  // Validate form fields
   const validateForm = () => {
     const { productName, productOriginalPrice, productOfferPrice, productCategory, productImage } = formData;
     if (!productName || !productOriginalPrice || !productOfferPrice || !productCategory || !productImage) {
@@ -43,7 +40,6 @@ function AdminAddProduct() {
     return null;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errorMessage = validateForm();
@@ -60,7 +56,7 @@ function AdminAddProduct() {
     productData.append("productOriginalPrice", formData.productOriginalPrice);
     productData.append("productOfferPrice", formData.productOfferPrice);
     productData.append("productCategory", formData.productCategory);
-    productData.append("productImage", formData.productImage); // ✅ FIXED IMAGE FIELD NAME
+    productData.append("productImage", formData.productImage); 
 
     const token = localStorage.getItem("token");
     if (!token) {
