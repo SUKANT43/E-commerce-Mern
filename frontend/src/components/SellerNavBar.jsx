@@ -24,16 +24,16 @@ function SellerNavBar() {
 
       <div className={`fixed top-22 left-0 h-full w-64 bg-white shadow-lg transform ${menuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300`}>
         <nav className="flex flex-col mt-24 text-lg font-semibold text-gray-700">
-          <Link to="/add-product" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
+          <Link to="/admin-add-product" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
             <FaPlus /> Add Product
           </Link>
-          <Link to="/view-product" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
+          <Link to="/admin-view" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
             <FaBoxOpen /> View Product
           </Link>
-          <Link to="/view-order" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
+          <Link to="/admin-order" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
             <FaClipboardList /> View Order
           </Link>
-          <Link to="/view-shipment" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
+          <Link to="/admin-shipping" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
             <FaTruck /> View Shipment
           </Link>
         </nav>

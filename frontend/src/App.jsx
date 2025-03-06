@@ -16,6 +16,7 @@ import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminView from "./pages/AdminView";
 import AdminOrder from "./pages/AdminOrder";
 import AdminShipping from "./pages/AdminShipping";
+import SellerNavBar from "./components/SellerNavBar";
 
 function AppContent() {
   const location = useLocation(); // useLocation() is now inside BrowserRouter
@@ -26,6 +27,7 @@ function AppContent() {
   return (
     <>
       {!adminRoutes.includes(location.pathname) && <NavBar />}
+      {adminRoutes.includes(location.pathname)&&<SellerNavBar/>}
 
       <Routes>
         <Route path="user-login" element={<UserLogin />} />
