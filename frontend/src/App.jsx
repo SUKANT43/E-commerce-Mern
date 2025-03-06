@@ -12,6 +12,10 @@ import ProductPage from "./pages/ProductPage";
 import Demo from "./pages/demo";
 import SellerResetPassword from "./pages/sellerResetPassword";
 import UserResetPassword from "./pages/userResetPassword";
+import AdminAddProduct from "./pages/AdminAddProduct";
+import AdminView from "./pages/AdminView";
+import AdminOrder from "./pages/AdminOrder";
+import AdminShipping from "./pages/AdminShipping";
 function App() {
   return (
     <BrowserRouter>
@@ -28,8 +32,11 @@ function App() {
          <Route path="demo" element={<Demo/>}/>
          <Route path="seller-reset-password" element={<SellerResetPassword/>}/>
          <Route path="user-reset-password" element={<UserResetPassword/>}/>
-
-      </Routes>
+         <Route path="admin/add/product" element={<AdminAddProduct/>}/>
+         <Route path="admin/view" element={<AdminView/>}/>
+         <Route path="admin/order" element={<AdminOrder/>}/>
+         <Route path="admin/shipping" element={<AdminShipping/>}/>
+</Routes>
      <Footer />
     </BrowserRouter>
   );

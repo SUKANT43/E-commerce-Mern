@@ -18,7 +18,7 @@ function AdminLogin() {
       if (log.status === 200 && log.data.token) {
         localStorage.setItem("token", log.data.token);
         alert("Login Successful");
-        navigate("/");
+        navigate("/admin/add/product");
       } else {
         alert("Invalid email or password.");
       }
