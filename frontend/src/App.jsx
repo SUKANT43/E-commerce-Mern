@@ -19,9 +19,8 @@ import AdminShipping from "./pages/AdminShipping";
 import SellerNavBar from "./components/SellerNavBar";
 
 function AppContent() {
-  const location = useLocation(); // useLocation() is now inside BrowserRouter
+  const location = useLocation(); 
 
-  // Define routes where NavBar and Footer should be hidden
   const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping"];
 
   return (

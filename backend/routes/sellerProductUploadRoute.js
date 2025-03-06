@@ -1,10 +1,21 @@
-const express=require('express')
-const route=express.Router()
-const {productUpload,getProduct,editProduct,deleteProduct}=require('../controller/sellerProductUploadController')
+const express = require('express');
+const route = express.Router();
+const upload = require('../middleWare/sellerProductMiddleware');
+const { protect } = require('../middleWare/sellerLoginMiddleware');
+const { productUpload, getProduct, editProduct, deleteProduct } = require('../controller/sellerProductUploadController');
 
-route.post('/productUpload',productUpload)
-route.get('/getProductDetails',getProduct)
-route.put('/editProductDetails',editProduct)
-route.delete('/deleteProductDetails',deleteProduct)
+const handleFileUpload = (req, res, next) => {
+    upload.single('productImage')(req, res, function (err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        next();
+    });
+};
 
-module.exports=route
+route.post('/products', protect, handleFileUpload, productUpload);
+route.get('/products', protect, getProduct);
+route.put('/products/:id', protect, handleFileUpload, editProduct);
+route.delete('/products/:id', protect, deleteProduct);
+
+module.exports = route;
