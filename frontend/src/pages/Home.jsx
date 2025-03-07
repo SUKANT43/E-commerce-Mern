@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,11 +28,19 @@ const Home = () => {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      (selectedCategory === "" || product.productCategory === selectedCategory) &&
-      product.productOfferPrice <= priceRange
-  );
+  const filteredProducts = products.filter((product) => {
+    const searchMatch =
+      !searchQuery ||
+      product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.productCategory.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const categoryMatch =
+      selectedCategory === "" || product.productCategory === selectedCategory;
+
+    const priceMatch = product.productOfferPrice <= priceRange;
+
+    return searchMatch && categoryMatch && priceMatch;
+  });
 
   if (loading) return <p className="text-center text-lg">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -42,15 +50,14 @@ const Home = () => {
       <h2 className="text-3xl font-bold text-center mb-6">Explore Our Products</h2>
 
       <div className="fixed top-35 right-8 z-10">
-  <button
-    onClick={() => setShowFilters(!showFilters)}
-    className="px-4 py-2 bg-gray-200 rounded-lg shadow flex items-center space-x-2"
-  >
-    <p className="font-semibold">Filter</p>
-    <FaFilter className="text-lg" />
-  </button>
-</div>
-
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="px-4 py-2 bg-gray-200 rounded-lg shadow flex items-center space-x-2"
+        >
+          <p className="font-semibold">Filter</p>
+          <FaFilter className="text-lg" />
+        </button>
+      </div>
 
       {showFilters && (
         <div className="absolute right-8 top-16 bg-white p-4 rounded-lg shadow-lg w-64">

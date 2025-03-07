@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import logo from '../assets/c&c.png'
 function AdminLogin() {
   const [data, setData] = useState({
     email: "",
@@ -35,6 +35,7 @@ function AdminLogin() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+        <img src={logo} className="w-30 h-30 ml-24"/>
         <h2 className="text-2xl font-semibold text-center">Seller Sign In</h2>
         <p className="text-gray-500 text-center mb-4">Enter your details below</p>
 

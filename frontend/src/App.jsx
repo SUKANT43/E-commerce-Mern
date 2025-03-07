@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import UserLogin from "./pages/userLogin";
 import UserSignup from "./pages/userSignup";
@@ -20,15 +19,21 @@ import SellerNavBar from "./components/SellerNavBar";
 import ErrorBoundary from "./pages/ErrorBoundary";
 import EditProduct from "./pages/EditProduct";
 import ProductDetails from "./pages/ProductDetails";
+import Contact from "./pages/Contact";
+import NavBar from "./components/NavBar";
+import { useState } from "react"; 
+
 function AppContent() {
   const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState(""); 
 
-  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping", "/admin"];
+  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping", "/admin", "/seller-login", "/seller-signup", "/seller-reset-password"];
+  const sellerRoutes = ["/seller-login", "/seller-signup", "/seller-reset-password"];
 
   return (
     <>
-      {!adminRoutes.includes(location.pathname) && <NavBar />}
-      {adminRoutes.includes(location.pathname) && <SellerNavBar />}
+      <NavBar setSearchQuery={setSearchQuery} /> 
+      {adminRoutes.includes(location.pathname) && !sellerRoutes.includes(location.pathname) && <SellerNavBar />}
 
       <Routes>
         <Route path="user-login" element={<UserLogin />} />
@@ -36,7 +41,7 @@ function AppContent() {
         <Route path="seller-login" element={<AdminLogin />} />
         <Route path="seller-signup" element={<AdminSignup />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home searchQuery={searchQuery} />} /> 
         <Route path="like" element={<Like />} />
         <Route path="product-page" element={<ProductPage />} />
         <Route path="demo" element={<Demo />} />
@@ -49,7 +54,7 @@ function AppContent() {
         <Route path="/admin" element={<AdminView />} />
         <Route path="/edit/:id" element={<EditProduct />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-
+        <Route path="contact" element={<Contact />} />
       </Routes>
 
       {!adminRoutes.includes(location.pathname) && <Footer />}
