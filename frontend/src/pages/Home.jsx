@@ -42,11 +42,16 @@ const Home = () => {
       <h2 className="text-3xl font-bold text-center mb-6">Explore Our Products</h2>
 
       {/* Fixed Filter Button */}
-      <div className="fixed top-5 right-8 z-10">
-        <button onClick={() => setShowFilters(!showFilters)} className="p-2 bg-gray-200 rounded-full shadow">
-          <FaFilter className="text-lg" />
-        </button>
-      </div>
+      <div className="fixed top-35 right-8 z-10">
+  <button
+    onClick={() => setShowFilters(!showFilters)}
+    className="px-4 py-2 bg-gray-200 rounded-lg shadow flex items-center space-x-2"
+  >
+    <p className="font-semibold">Filter</p>
+    <FaFilter className="text-lg" />
+  </button>
+</div>
+
 
       {/* Filter Panel */}
       {showFilters && (
