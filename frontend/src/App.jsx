@@ -19,6 +19,7 @@ import AdminShipping from "./pages/AdminShipping";
 import SellerNavBar from "./components/SellerNavBar";
 import ErrorBoundary from "./pages/ErrorBoundary";
 import EditProduct from "./pages/EditProduct";
+import ProductDetails from "./pages/ProductDetails";
 function AppContent() {
   const location = useLocation();
 
@@ -47,6 +48,8 @@ function AppContent() {
         <Route path="admin-shipping" element={<AdminShipping />} />
         <Route path="/admin" element={<AdminView />} />
         <Route path="/edit/:id" element={<EditProduct />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+
       </Routes>
 
       {!adminRoutes.includes(location.pathname) && <Footer />}

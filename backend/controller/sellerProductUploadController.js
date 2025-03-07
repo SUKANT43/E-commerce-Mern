@@ -44,7 +44,6 @@ const getProduct = async (req, res) => {
     }
 };
 
-// Fetch all products without authentication
 const getAllProducts = async (req, res) => {
     try {
         const products = await sellerProductModel.find();
@@ -53,6 +52,15 @@ const getAllProducts = async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 };
+
+const getSingleProduct=async(req,res)=>{
+        try{
+            const getProduct=await sellerProductModel.findById(req.params.id)
+            res.json(getProduct)
+        }catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+}
 
 const editProduct = async (req, res) => {
     try {
@@ -107,4 +115,4 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = { productUpload, getProduct, getAllProducts, editProduct, deleteProduct };
+module.exports = { productUpload, getProduct, getAllProducts, editProduct, deleteProduct,getSingleProduct };
