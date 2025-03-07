@@ -28,7 +28,7 @@ function NavBar({ setSearchQuery }) {
         </p>
       </div>
 
-      <div className="flex items-center justify-between px-4 md:px-6 py-0 shadow-md mt-12 relative bg-white">
+      <div className="fixed top-9 left-0 right-0 flex items-center justify-between px-4 md:px-6 py-0 shadow-md bg-white z-40">
         <div className="flex items-center gap-3">
           <img src={icon} className="w-14 h-14 md:w-20 md:h-20 cursor-pointer" alt="Logo" />
           <h1 className="text-xl md:text-2xl font-extrabold tracking-wide text-gray-800 cursor-pointer">C&C</h1>
@@ -41,7 +41,7 @@ function NavBar({ setSearchQuery }) {
         <div className={`absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none md:flex gap-8 text-lg font-semibold px-4 md:px-0 transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}>
           <Link to="/" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Home</Link>
           <Link to="/contact" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Contact</Link>
-          <h1 className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">About</h1>
+          <Link to="/about" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">About</Link>
           <Link to="/user-login" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Sign In</Link>
         </div>
 

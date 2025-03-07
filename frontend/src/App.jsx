@@ -22,6 +22,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Contact from "./pages/Contact";
 import NavBar from "./components/NavBar";
 import { useState } from "react"; 
+import About from "./pages/About";
 
 function AppContent() {
   const location = useLocation();
@@ -32,7 +33,7 @@ function AppContent() {
 
   return (
     <>
-      <NavBar setSearchQuery={setSearchQuery} /> 
+      {!adminRoutes.includes(location.pathname) &&<NavBar setSearchQuery={setSearchQuery} />} 
       {adminRoutes.includes(location.pathname) && !sellerRoutes.includes(location.pathname) && <SellerNavBar />}
 
       <Routes>
@@ -55,6 +56,8 @@ function AppContent() {
         <Route path="/edit/:id" element={<EditProduct />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="about" element={<About />} />
+
       </Routes>
 
       {!adminRoutes.includes(location.pathname) && <Footer />}

@@ -88,7 +88,7 @@ function userSignup() {
 
         <p className="text-gray-500 text-center mt-4">
           Already have an account?{' '}
-          <Link to="/seller-login" className="text-gray-800 font-semibold">
+          <Link to="/user-login" className="text-gray-800 font-semibold">
             Login
           </Link>
         </p>

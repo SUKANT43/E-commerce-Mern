@@ -62,7 +62,7 @@ function UserResetPassword() {
             type="password"
             placeholder="Enter Old Password"
             className="w-full p-3 border border-gray-300 rounded-md"
-            name="password" // Corrected from "oldPassword" to "password"
+            name="password" 
             value={data.password}
             onChange={handleChange}
             required
@@ -92,7 +92,7 @@ function UserResetPassword() {
         </form>
 
         <p className="text-gray-500 text-center mt-4">
-          Login? <span className="text-gray-800 font-semibold cursor-pointer" onClick={() => navigate("/seller-login")}>Login</span>
+          Login? <span className="text-gray-800 font-semibold cursor-pointer" onClick={() => navigate("/user-login")}>Login</span>
         </p>
       </div>
     </div>
