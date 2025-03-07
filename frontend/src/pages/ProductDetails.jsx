@@ -39,15 +39,12 @@ const ProductDetails = () => {
             className="w-full object-cover rounded"
           />
         </div>
-
-        {/* Product Details */}
         <div className="w-full md:w-1/2 p-6">
           <h2 className="text-2xl font-bold">{product.productName}</h2>
           <p className="text-gray-600 mt-2">{product.productDescription}</p>
           <p className="text-red-500 font-bold text-xl mt-2">${product.productOfferPrice}</p>
           <p className="text-gray-500 line-through">${product.productOriginalPrice}</p>
 
-          {/* Add to Cart & Wishlist Buttons */}
           <div className="flex mt-6 space-x-4">
             <button className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800">
               <FaShoppingCart /> <span>Add to Cart</span>

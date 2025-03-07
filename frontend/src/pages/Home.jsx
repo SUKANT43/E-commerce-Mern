@@ -41,7 +41,6 @@ const Home = () => {
     <div className="p-8 bg-gray-100 min-h-screen relative">
       <h2 className="text-3xl font-bold text-center mb-6">Explore Our Products</h2>
 
-      {/* Fixed Filter Button */}
       <div className="fixed top-35 right-8 z-10">
   <button
     onClick={() => setShowFilters(!showFilters)}
@@ -53,7 +52,6 @@ const Home = () => {
 </div>
 
 
-      {/* Filter Panel */}
       {showFilters && (
         <div className="absolute right-8 top-16 bg-white p-4 rounded-lg shadow-lg w-64">
           <select
@@ -83,7 +81,6 @@ const Home = () => {
         </div>
       )}
 
-      {/* Product List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <div
