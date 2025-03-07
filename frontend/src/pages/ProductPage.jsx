@@ -24,7 +24,6 @@ function ProductPage() {
 
   return (
     <div className="flex p-6 gap-8">
-      {/* Left Section: Images */}
       <div className="flex gap-4">
         <div className="flex flex-col gap-2">
           {product.images.map((img, index) => (
@@ -40,7 +39,6 @@ function ProductPage() {
         <img src={mainImage} alt="Main" className="w-96 h-96 object-cover" />
       </div>
 
-      {/* Right Section: Product Details */}
       <div>
         <h1 className="text-2xl font-bold">{product.name}</h1>
         <div className="flex items-center gap-2">
@@ -52,7 +50,6 @@ function ProductPage() {
         <p className="text-2xl font-bold text-red-500">{product.price}</p>
         <p className="text-gray-600">{product.description}</p>
 
-        {/* Color Selection */}
         <div className="mt-4">
           <h3 className="font-semibold">Colours:</h3>
           <div className="flex gap-2">
@@ -71,7 +68,6 @@ function ProductPage() {
 
      
 
-        {/* Quantity Selector */}
         <div className="mt-4 flex items-center gap-4">
           <button
             className="px-3 py-1 border rounded"
@@ -88,7 +84,6 @@ function ProductPage() {
           </button>
         </div>
 
-        {/* Buy & Wishlist */}
         <div className="mt-4 flex gap-4">
           <button className="bg-red-500 text-white px-6 py-2 rounded-md">
             Add To Cart
@@ -96,7 +91,6 @@ function ProductPage() {
           <FaHeart className="text-gray-500 text-2xl cursor-pointer hover:text-red-500" />
         </div>
 
-        {/* Delivery & Returns */}
         <div className="mt-6 border p-4 rounded-lg">
           <p className="font-semibold">🚚 Free Delivery</p>
           <p className="text-gray-600 text-sm">

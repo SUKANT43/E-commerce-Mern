@@ -30,12 +30,7 @@ function SellerNavBar() {
           <Link to="/admin-view" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
             <FaBoxOpen /> View Product
           </Link>
-          <Link to="/admin-order" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
-            <FaClipboardList /> View Order
-          </Link>
-          <Link to="/admin-shipping" className="flex items-center gap-3 px-6 py-3 hover:bg-gray-200">
-            <FaTruck /> View Shipment
-          </Link>
+       
         </nav>
       </div>
     </div>
