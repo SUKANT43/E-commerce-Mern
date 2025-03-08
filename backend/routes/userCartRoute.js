@@ -5,7 +5,7 @@ const {addCart,getCart,editCart,deleteCart}=require('../controller/cartControlle
 route.post('/addCart',protect,addCart)
 route.get('/getCart',protect,getCart)
 route.put('/editCart',protect,editCart)
-route.delete('/deleteCart/:id',protect,deleteCart)
+route.delete('/deleteCart',protect,deleteCart)
 
 
 module.exports=route

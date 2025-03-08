@@ -17,7 +17,8 @@ const addCart = async (req, res) => {
             userId:req.user.id,
             productId,
             quantity,
-            price: newPrice
+            price: newPrice,
+            original:price
         });
 
         await newCart.save();
@@ -33,35 +34,36 @@ const addCart = async (req, res) => {
 
 
 const getCart = async (req, res) => {
-  try {
-    const cartItems = await cartModel.find({ userId: req.user.id });
-
-    if (!cartItems.length) {
-      return res.status(404).json({ message: "Cart is empty" });
-    }
-
-    const cartWithProductDetails = await Promise.all(cartItems.map(async (item) => {
-      const product = await productModel.findById(item.productId);
-
-      if (!product) {
-        return res.status(404).json({ message: "Product not found for cart item" });
+    try {
+      const cartItems = await cartModel.find({ userId: req.user.id });
+  
+      if (!cartItems.length) {
+        return res.status(404).json({ message: "Cart is empty" });
       }
-
-      return {
-        cartId: item._id,
-        quantity: item.quantity,
-        price: item.price,
-        productName: product.productName,
-        productImage: product.productImage
-      };
-    }));
-
-    res.status(200).json(cartWithProductDetails);
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to get cart", error: error.message });
-  }
-};
-
+  
+      const cartWithProductDetails = await Promise.all(cartItems.map(async (item) => {
+        const product = await productModel.findById(item.productId);
+  
+        if (!product) {
+          return res.status(404).json({ message: "Product not found for cart item" });
+        }
+  
+        return {
+          cartId: item._id,
+          quantity: item.quantity,
+          subTotal:item.price,
+          price: product.productOfferPrice,  
+          productName: product.productName,
+          productImage: product.productImage
+        };
+      }));
+  
+      res.status(200).json(cartWithProductDetails);
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Failed to get cart", error: error.message });
+    }
+  };
+  
 const editCart = async (req, res) => {
     try {
       const { cartId, quantity } = req.body;
@@ -77,7 +79,7 @@ const editCart = async (req, res) => {
       }
   
       cartItem.quantity = quantity;
-      cartItem.price = cartItem.quantity * cartItem.price;  
+      cartItem.price = cartItem.quantity * cartItem.original;  
   
       await cartItem.save();
   
