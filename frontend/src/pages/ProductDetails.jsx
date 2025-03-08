@@ -9,6 +9,9 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState(null);
+
+  const MAX_QUANTITY = 10;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,11 +29,56 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    try {
+      const token = localStorage.getItem("token"); 
+      console.log("Token:", token); 
+      if (!token) {
+        setMessage("You must be logged in to add items to cart.");
+        return;
+      }
+
+      const cartData = {
+        productId: id,
+        quantity,
+        price: product.productOfferPrice,
+      };
+
+      console.log("Cart Data:", cartData); 
+
+      const response = await axios.post(
+        "http://localhost:2005/api/cart/addCart",
+        cartData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Response Data:", response.data); 
+
+      if (response.status === 202) {
+        setMessage("This product is already in your cart.");
+      } else if (response.status === 201) {
+        setMessage("Added to cart successfully!");
+      } else if (response.status === 500) {
+        setMessage("There was an error processing your request.");
+      } else if (response.status === 203) {
+        setMessage("Please enter all fields.");
+      }
+    } catch (error) {
+      console.error("Error:", error); 
+      setMessage(error.response?.data?.message || "Failed to add to cart");
+    }
+  };
+
   if (loading) return <p className="text-center text-lg">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center">
+    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center mt-20">
       <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-6 w-full max-w-5xl">
         <div className="w-full md:w-1/2 flex flex-col items-center mt-20">
           <img
@@ -43,9 +91,12 @@ const ProductDetails = () => {
         <div className="w-full md:w-1/2">
           <h2 className="text-3xl font-bold">{product.productName}</h2>
           <p className="text-gray-600 mt-2">{product.productDescription}</p>
-          <p className="text-gray-500 mt-2">This product is crafted with high-quality materials, ensuring exceptional durability, style, and comfort. Designed to meet your everyday needs, it combines functionality with elegance, making it a perfect choice for any occasion. Whether for personal use or as a thoughtful gift, this product guarantees reliability and satisfaction.</p>
-          <p className="text-red-500 font-bold text-2xl mt-2">${product.productOfferPrice}</p>
-          <p className="text-gray-500 line-through">${product.productOriginalPrice}</p>
+          <p className="text-red-500 font-bold text-2xl mt-2">
+            ${product.productOfferPrice}
+          </p>
+          <p className="text-gray-500 line-through">
+            ${product.productOriginalPrice}
+          </p>
 
           <div className="mt-6 flex items-center space-x-4">
             <button
@@ -57,20 +108,25 @@ const ProductDetails = () => {
             <span className="text-xl font-semibold">{quantity}</span>
             <button
               className="px-4 py-2 bg-gray-200 rounded-lg"
-              onClick={() => setQuantity((prev) => prev + 1)}
+              onClick={() => setQuantity((prev) => Math.min(MAX_QUANTITY, prev + 1))}
             >
               +
             </button>
           </div>
 
           <div className="flex mt-6 space-x-4">
-            <button className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            <button
+              className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              onClick={handleAddToCart}
+            >
               <FaShoppingCart /> <span>Add to Cart</span>
             </button>
             <button className="flex items-center space-x-2 px-6 py-3 border border-gray-400 rounded-lg hover:bg-gray-200">
               <FaRegHeart /> <span>Wishlist</span>
             </button>
           </div>
+
+          {message && <p className="text-center text-blue-500 mt-4">{message}</p>}
 
           <div className="mt-6">
             <div className="flex items-center space-x-4">
@@ -79,7 +135,9 @@ const ProductDetails = () => {
                 alt="Return Policy"
                 className="w-12 h-12"
               />
-              <p className="text-gray-600">7-day return policy for a hassle-free experience.</p>
+              <p className="text-gray-600">
+                7-day return policy for a hassle-free experience.
+              </p>
             </div>
             <div className="flex items-center space-x-4 mt-4">
               <img
@@ -87,7 +145,9 @@ const ProductDetails = () => {
                 alt="Fast Delivery"
                 className="w-12 h-12"
               />
-              <p className="text-gray-600">Delivery within 2 days for fast and reliable shipping.</p>
+              <p className="text-gray-600">
+                Delivery within 2 days for fast and reliable shipping.
+              </p>
             </div>
           </div>
         </div>

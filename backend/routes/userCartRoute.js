@@ -2,10 +2,10 @@ const express=require("express")
 const route=express.Router()
 const {protect}=require('../middleWare/userLoginMIddleWare')
 const {addCart,getCart,editCart,deleteCart}=require('../controller/cartController')
-route.post('/addCart',addCart)
+route.post('/addCart',protect,addCart)
 route.get('/getCart',protect,getCart)
 route.put('/editCart',protect,editCart)
-route.delete('/deleteCart',protect,deleteCart)
+route.delete('/deleteCart/:id',protect,deleteCart)
 
 
 module.exports=route
