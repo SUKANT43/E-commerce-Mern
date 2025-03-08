@@ -100,19 +100,26 @@ const deleteProduct = async (req, res) => {
         const { id } = req.params;
         const product = await sellerProductModel.findById(id);
 
-        if (!product) return res.status(404).json({ message: "Product not found" });
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
 
         if (product.userId.toString() !== req.user.id) {
             return res.status(403).json({ message: "Unauthorized to delete this product" });
         }
 
-        await cloudinary.uploader.destroy(product.imagePublicId);
+        if (product.imagePublicId) {
+            await cloudinary.uploader.destroy(product.imagePublicId);
+        }
+
         await sellerProductModel.findByIdAndDelete(id);
 
         res.json({ message: "Product deleted successfully" });
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        console.error("Error deleting product:", e);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 
 module.exports = { productUpload, getProduct, getAllProducts, editProduct, deleteProduct,getSingleProduct };

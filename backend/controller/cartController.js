@@ -7,8 +7,8 @@ const addCart = async (req, res) => {
         if(!productId || !quantity || !price){
             res.status(203).json({msg:"please enter all fields"})
         }
-        const findId=await cartModel.findOne({productId})
-        if(findId){
+        const findId=await cartModel.findOne({productId,userId: req.user.id})
+        if(findId ){
             return res.status(202).json({msg:"product is already in cart"})
         }
         const newPrice = quantity * price;

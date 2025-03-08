@@ -11,6 +11,7 @@ const protect=async(req,res,next)=>{
                 if(!req.user){
                     return res.status(200).json({msg:"user not found"}) 
                 }
+                console.log(req.user.name)
                 next()
             }
             else{
@@ -19,7 +20,7 @@ const protect=async(req,res,next)=>{
             }
         }
         catch(e){
-            return resizeBy.status(400).json({msg:e.message})
+            return res.status(400).json({msg:e.message})
         }
         if(!token){
             return  res.status(200).json({msg:"enter the jsonwebtoken"})

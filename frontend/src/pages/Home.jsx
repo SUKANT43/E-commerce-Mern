@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaFilter } from "react-icons/fa";
+import { FaFilter, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({ searchQuery }) => {
@@ -8,8 +8,10 @@ const Home = ({ searchQuery }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [priceRange, setPriceRange] = useState(1000);
+  const [priceRange, setPriceRange] = useState(2000);
+  const [minPrice, setMinPrice] = useState(0); 
   const [showFilters, setShowFilters] = useState(false);
+  const [userName, setUserName] = useState(""); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +30,29 @@ const Home = ({ searchQuery }) => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token"); 
+      if (token) {
+        try {
+          const response = await axios.get(
+            "http://localhost:2005/api/userLogin/me",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setUserName(response.data.name); 
+        } catch (err) {
+          console.error("Failed to fetch user data:", err);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const filteredProducts = products.filter((product) => {
     const searchMatch =
       !searchQuery ||
@@ -37,7 +62,8 @@ const Home = ({ searchQuery }) => {
     const categoryMatch =
       selectedCategory === "" || product.productCategory === selectedCategory;
 
-    const priceMatch = product.productOfferPrice <= priceRange;
+    const priceMatch =
+      product.productOfferPrice <= priceRange && product.productOfferPrice >= minPrice;
 
     return searchMatch && categoryMatch && priceMatch;
   });
@@ -47,7 +73,21 @@ const Home = ({ searchQuery }) => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen relative mt-25">
-      <h2 className="text-3xl font-bold text-center mb-6">Explore Our Products</h2>
+      <h2 className="text-4xl font-bold text-center mb-8">Explore Our Products</h2>
+
+      <div className="fixed top-8 right-8 z-10 flex items-center space-x-4">
+        {userName && <span className="font-semibold text-lg">Welcome, {userName}</span>}
+        <button
+          onClick={() => {
+            localStorage.removeItem("token"); 
+            navigate("/login");
+          }}
+          className="px-4 py-2 bg-gray-200 rounded-lg shadow flex items-center space-x-2"
+        >
+          <p className="font-semibold">Logout</p>
+          <FaSignOutAlt className="text-lg" />
+        </button>
+      </div>
 
       <div className="fixed top-35 right-8 z-10">
         <button
@@ -74,36 +114,49 @@ const Home = ({ searchQuery }) => {
             <option value="Speaker">Speaker</option>
             <option value="Home Appliances">Home Appliances</option>
           </select>
-          <div className="flex flex-col">
+
+          <div className="flex flex-col mb-3">
+            <label>Min Price: ${minPrice}</label>
+            <input
+              type="range"
+              min="0"
+              max="2000"
+              value={minPrice}
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+              className="cursor-pointer"
+            />
+          </div>
+
+          <div className="flex flex-col mb-3">
             <label>Max Price: ${priceRange}</label>
             <input
               type="range"
               min="0"
               max="2000"
               value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
+              onChange={(e) => setPriceRange(Number(e.target.value))}
               className="cursor-pointer"
             />
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 ">
         {filteredProducts.map((product) => (
           <div
             key={product._id}
-            className="bg-white p-4 rounded-lg shadow-lg cursor-pointer"
+            className="bg-white p-6 rounded-lg shadow-lg cursor-pointer transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
             onClick={() => navigate(`/product/${product._id}`)}
           >
             <img
               src={product.productImage || "https://via.placeholder.com/150"}
               alt={product.productName}
-              className="w-full h-40 object-cover rounded"
+              className="w-full h-50 object-cover rounded mb-4"
             />
-            <h3 className="text-lg font-semibold mt-2">{product.productName}</h3>
+            <h3 className="text-lg font-semibold text-gray-800">{product.productName}</h3>
             <p className="text-gray-600">Category: {product.productCategory}</p>
-            <p className="text-red-500 font-bold">${product.productOfferPrice}</p>
-            <p className="text-gray-500 line-through">${product.productOriginalPrice}</p>
+            <p className="text-red-500 font-bold mt-2">${product.productOfferPrice}</p>
+            <p className="text-gray-500 line-through mt-1">${product.productOriginalPrice}</p>
           </div>
         ))}
       </div>

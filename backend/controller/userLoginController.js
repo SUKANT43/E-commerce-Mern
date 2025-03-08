@@ -12,7 +12,7 @@ const register = async (req, res) => {
 
         const isEmailAlreadyExist = await sellerLoginModel.findOne({ email });
         if (isEmailAlreadyExist) {
-            return res.status(409).json({ msg: "User already exists" }); // 409 Conflict
+            return res.status(409).json({ msg: "User already exists" }); 
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -74,7 +74,8 @@ const me = async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
-        return res.status(200).json(user);
+        console.log(req.user.name+ " hi")
+        return res.status(200).json({name:user.name});
     } catch (e) {
         return res.status(500).json({ msg: e.message });
     }

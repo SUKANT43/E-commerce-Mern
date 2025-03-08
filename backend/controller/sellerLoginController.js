@@ -60,10 +60,8 @@ const me = async (req, res) => {
     try {
         const { id, name, email } = await sellerLogin.findById(req.user.id);
         return res.status(200).json({
-            id,
             name,
-            email
-        });
+            });
     } catch (e) {
         return res.status(500).json({ error: e.message });
     }
