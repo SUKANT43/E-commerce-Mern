@@ -108,6 +108,32 @@ const editCart = async (req, res) => {
       res.status(500).json({ success: false, message: "Failed to delete cart item", error: error.message });
     }
   };
-  
 
-module.exports={addCart,getCart,editCart,deleteCart}
+  const putLikeProduct=(req,res)=>{
+    try{
+
+    }
+    catch(e){
+      res.status(500).json({ success: false, message: "Failed to add liked item", error: error.message });
+    }
+  } 
+
+  const getLikeProduct=(req,res)=>{
+    try{
+      
+    }
+    catch(e){
+      res.status(500).json({ success: false, message: "Failed to add liked item", error: error.message });
+    }
+  } 
+
+  const removeLikedaproduct=(req,res)=>{
+    try{
+      
+    }
+    catch(e){
+      res.status(500).json({ success: false, message: "Failed to delete like item", error: error.message });
+    }
+  }
+
+module.exports={addCart,getCart,editCart,deleteCart,putLikeProduct,getLikeProduct,removeLikedaproduct}
