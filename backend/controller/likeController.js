@@ -47,6 +47,7 @@ const getLikeProduct = async (req, res) => {
 
         return {
           productId: product._id,
+          productName:product.productName,
           productImage: product.productImage,
           category: product.productCategory,
           originalPrice: product.productOriginalPrice,
