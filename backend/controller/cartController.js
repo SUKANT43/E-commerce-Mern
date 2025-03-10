@@ -77,6 +77,30 @@ const getCart = async (req, res) => {
   }
 };
 
+const checkInCart = async (req, res) => {
+  try {
+      const { productId } = req.body;
+      const userId = req.user?.id; 
+
+      if (!productId || !userId) {
+          return res.status(400).json({ message: "Missing productId or userId" });
+      }
+
+      const check = await cartModel.findOne({ productId, userId });
+
+      if (!check) {
+          return res.status(400).json({ message: "Product not in cart" });
+      }
+
+      return res.status(200).json({ message: "Product is in cart" });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
 const editCart = async (req, res) => {
   try {
     const { cartId, quantity } = req.body;
@@ -137,4 +161,4 @@ const deleteCart = async (req, res) => {
   }
 };
 
-module.exports = { addCart, getCart, editCart, deleteCart };
+module.exports = { addCart, getCart, editCart, deleteCart,checkInCart };
