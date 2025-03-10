@@ -139,15 +139,41 @@ const editCart = async (req, res) => {
 const deleteCart = async (req, res) => {
   try {
     const { cartId } = req.body;
-
+    console.log(cartId)
     if (!cartId) {
       return res.status(400).json({ message: "Cart ID is required" });
     }
+    console.log(req.user.id)
 
-    const cartItem = await cartModel.findByIdAndDelete(cartId);
+    const cartItem = await cartModel.findOneAndDelete({ productId: cartId, userId: req.user.id });
 
     if (!cartItem) {
-      return res.status(404).json({ message: "Cart item not found" });
+      return res.status(404).json({ message: "Cart item not found or not authorized to delete" });
+    }
+
+    res.status(200).json({ message: "Cart item deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete cart item",
+      error: error.message,
+    });
+  }
+};
+
+const deleteCartFromMain = async (req, res) => {
+  try {
+    const { cartId } = req.body;
+    console.log(cartId)
+    if (!cartId) {
+      return res.status(400).json({ message: "Cart ID is required" });
+    }
+    console.log(req.user.id)
+
+    const cartItem = await cartModel.findOneAndDelete({ _id: cartId, userId: req.user.id });
+
+    if (!cartItem) {
+      return res.status(404).json({ message: "Cart item not found or not authorized to delete" });
     }
 
     res.status(200).json({ message: "Cart item deleted successfully" });
@@ -161,4 +187,5 @@ const deleteCart = async (req, res) => {
 };
 
 
-module.exports = { addCart, getCart, editCart, deleteCart,checkInCart };
+
+module.exports = { addCart, getCart, editCart, deleteCart,checkInCart,deleteCartFromMain };
