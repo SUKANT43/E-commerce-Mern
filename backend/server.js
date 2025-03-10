@@ -9,6 +9,7 @@ const userLogin=require('./routes/userLoginRoutes')
 const userProfile=require('./routes/userProfileRoute')
 const sellerProductUpload=require('./routes/sellerProductUploadRoute')
 const cart=require('./routes/userCartRoute')
+const like=require('./routes/likeRoutes')
 app.use(express.json())
 app.use(cors())
 app.use((req, res, next) => {
@@ -20,6 +21,8 @@ app.use('/api/userLogin',userLogin)
 app.use('/api/userProfile',userProfile)
 app.use('/api/sellerProductUpload',sellerProductUpload)
 app.use('/api/cart',cart)
+app.use('/api/like',like)
+
 app.listen(PORT,()=>{
     db()
     console.log("server is connected to:"+PORT)
