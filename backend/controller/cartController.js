@@ -136,7 +136,6 @@ const editCart = async (req, res) => {
     });
   }
 };
-
 const deleteCart = async (req, res) => {
   try {
     const { cartId } = req.body;
@@ -160,5 +159,6 @@ const deleteCart = async (req, res) => {
     });
   }
 };
+
 
 module.exports = { addCart, getCart, editCart, deleteCart,checkInCart };
