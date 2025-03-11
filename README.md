@@ -29,7 +29,7 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js) and Cloudin
 - **Context API** - State management
 - **Axios** - API requests
 - **Tailwind CSS** - Styling
-- - **Cloudinary** - Cloud storage
+-**Cloudinary** - Cloud storage
 
 ---
 
