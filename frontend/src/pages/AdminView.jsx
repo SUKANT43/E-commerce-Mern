@@ -24,7 +24,7 @@ function AdminView() {
       setLoading(false);
       return;
     }
-
+///
     try {
       const response = await axios.get("http://localhost:2005/api/sellerProductUpload/products", {
         headers: {
