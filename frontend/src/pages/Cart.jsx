@@ -7,14 +7,19 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
+  const token = localStorage.getItem("token");
 
-  // Fetching cart items from the backend
   useEffect(() => {
+    if (!token) {
+      setLoading(false);
+      return; 
+    }
+
     const fetchCart = async () => {
       try {
         const response = await axios.get("http://localhost:2005/api/cart/getCart", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setCartItems(response.data);
@@ -26,9 +31,8 @@ function Cart() {
     };
 
     fetchCart();
-  }, []);
+  }, [token]);
 
-  // Handle quantity change
   const handleQuantityChange = async (cartId, newQuantity) => {
     try {
       const response = await axios.put(
@@ -36,7 +40,7 @@ function Cart() {
         { cartId, quantity: newQuantity },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -51,12 +55,11 @@ function Cart() {
     }
   };
 
-  // Handle remove item from cart
   const handleRemoveItem = async (cartId) => {
     try {
-      const response = await axios.delete("http://localhost:2005/api/cart/deleteCart", {
+      const response = await axios.delete("http://localhost:2005/api/cart/deleteCartFromMain", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         data: { cartId },
       });
@@ -68,6 +71,16 @@ function Cart() {
   };
 
   if (loading) return <p>Loading...</p>;
+
+  if (!token || cartItems.length === 0) {
+    return (
+      <div className="p-6 bg-gray-100 min-h-screen mt-30 flex flex-col items-center justify-center">
+        <h2 className="text-xl font-semibold mb-4">Your cart is empty</h2>
+        {!token && <p className="text-red-500">Please log in to view your cart.</p>}
+        <Link to="/" className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg">Return to Shop</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen mt-30">
@@ -118,7 +131,9 @@ function Cart() {
         </table>
 
         <div className="flex justify-between items-center mt-6">
-          <button className="border px-4 py-2 rounded-lg cursor-pointer"><Link to="/">Return to Shop</Link></button>
+          <button className="border px-4 py-2 rounded-lg cursor-pointer">
+            <Link to="/">Return to Shop</Link>
+          </button>
         </div>
 
         <div className="mt-6 w-60 p-4 border rounded-lg">

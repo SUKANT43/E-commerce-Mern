@@ -1,59 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Like() {
-  // Sample cart items state
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "LCD Monitor", price: 650, quantity: 1, image: "/images/lcd-monitor.png" },
-    { id: 2, name: "H1 Gamepad", price: 550, quantity: 2, image: "/images/gamepad.png" },
-  ]);
+  const [likedProducts, setLikedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(null);
+  const token = localStorage.getItem("token"); 
 
-  // Function to remove an item from the cart
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  useEffect(() => {
+    const fetchLikedProducts = async () => {
+      if (!token) {
+        setMessage("You must be logged in to view liked products.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:2005/api/like/getLike", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setLikedProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching liked products:", error);
+        setMessage("Failed to fetch liked products.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLikedProducts();
+  }, [token]);
+
+  const removeLikedProduct = async (productId) => {
+    try {
+      await axios.delete("http://localhost:2005/api/like/removeLike", {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { productId },
+      });
+
+      setLikedProducts((prevProducts) => prevProducts.filter((item) => item.productId !== productId));
+      setMessage("Product removed from liked items.");
+    } catch (error) {
+      console.error("Error removing liked product:", error);
+      setMessage("Failed to remove product.");
+    }
   };
 
+  if (loading) return <p className="text-center text-lg">Loading liked products...</p>;
+  if (message) return <p className="text-center text-red-500">{message}</p>;
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen mt-30">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Liked Products</h2>
 
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b bg-gray-200">
-              <th className="py-3 px-4">Product</th>
-              <th className="py-3 px-4">Image</th>
-              <th className="py-3 px-4">Price</th>
-              <th className="py-3 px-4">Quantity</th>
-              <th className="py-3 px-4">Subtotal</th>
-              <th className="py-3 px-4">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cartItems.map((item) => (
-              <tr key={item.id} className="border-b">
-                <td className="py-4 px-4">{item.name}</td>
-                <td className="py-4 px-4">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 object-cover" />
-                </td>
-                <td className="py-4 px-4">${item.price}</td>
-                <td className="py-4 px-4">
-                  <span className="border px-3 py-1 rounded-lg bg-gray-100">{item.quantity}</span>
-                </td>
-                <td className="py-4 px-4">${item.price * item.quantity}</td>
-                <td className="py-4 px-4">
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <FaTrash className="cursor-pointer" />
-                  </button>
-                </td>
+        {likedProducts.length === 0 ? (
+          <p className="text-center text-gray-600 ">No liked products found.</p>
+        ) : (
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b bg-gray-200">
+                <th className="py-3 px-4">Product Name</th>
+                <th className="py-3 px-4">Image</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Original Price</th>
+                <th className="py-3 px-4">Offer Price</th>
+                <th className="py-3 px-4">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {likedProducts.map((product) => (
+                <tr key={product.productId} className="border-b">
+                  <td className="py-4 px-4">{product.productName}</td>
+                  <td className="py-4 px-4">
+                    <img
+                      src={product.productImage || "https://via.placeholder.com/100"}
+                      alt={product.category}
+                      className="w-16 h-16 object-cover"
+                    />
+                  </td>
+                  <td className="py-4 px-4">{product.category}</td>
+                  <td className="py-4 px-4 line-through text-gray-500">${product.originalPrice}</td>
+                  <td className="py-4 px-4 text-red-500 font-bold">${product.offerPrice}</td>
+                  <td className="py-4 px-4">
+                    <button
+                      onClick={() => removeLikedProduct(product.productId)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FaTrash className="cursor-pointer" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         <div className="flex justify-between items-center mt-6">
           <button className="border px-4 py-2 rounded-lg cursor-pointer">

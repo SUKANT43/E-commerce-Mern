@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaShoppingCart, FaRegHeart } from "react-icons/fa";
+import { FaShoppingCart, FaRegHeart, FaHeart } from "react-icons/fa";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -10,8 +10,11 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isInCart, setIsInCart] = useState(false); 
 
   const MAX_QUANTITY = 10;
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,25 +29,88 @@ const ProductDetails = () => {
         setLoading(false);
       }
     };
+
+    const checkIfLiked = async () => {
+      if (!token) return;
+      try {
+        const response = await axios.get("http://localhost:2005/api/like/getLike", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const likedProducts = response.data;
+        setIsLiked(likedProducts.some((item) => item.productId === id));
+      } catch (err) {
+        console.error("Error fetching liked products:", err);
+      }
+    };
+
+    const checkIfInCart = async () => {
+      if (!token) return;
+      try {
+        const response = await axios.post(
+          "http://localhost:2005/api/cart/checkCart",
+          { productId: id },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setIsInCart(true);
+      } catch (err) {
+        setIsInCart(false); 
+      }
+    };
+
     fetchProduct();
-  }, [id]);
+    checkIfLiked();
+    checkIfInCart();
+  }, [id, token]);
+
+  const handleLikeToggle = async () => {
+    if (!token) {
+      setMessage("You must be logged in to like items.");
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        await axios.delete("http://localhost:2005/api/like/removeLike", {
+          headers: { Authorization: `Bearer ${token}` },
+          data: { productId: id },
+        });
+
+        setIsLiked(false);
+        setMessage("Removed from wishlist.");
+      } else {
+        await axios.post(
+          "http://localhost:2005/api/like/addLike",
+          { productId: id },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setIsLiked(true);
+        setMessage("Added to wishlist.");
+      }
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+      setMessage("Failed to update wishlist.");
+    }
+  };
 
   const handleAddToCart = async () => {
-    try {
-      const token = localStorage.getItem("token"); 
-      console.log("Token:", token); 
-      if (!token) {
-        setMessage("You must be logged in to add items to cart.");
-        return;
-      }
+    if (!token) {
+      setMessage("You must be logged in to add items to the cart.");
+      return;
+    }
 
+    try {
       const cartData = {
         productId: id,
         quantity,
         price: product.productOfferPrice,
       };
-
-      console.log("Cart Data:", cartData); 
 
       const response = await axios.post(
         "http://localhost:2005/api/cart/addCart",
@@ -57,20 +123,44 @@ const ProductDetails = () => {
         }
       );
 
-      console.log("Response Data:", response.data); 
-
       if (response.status === 202) {
         setMessage("This product is already in your cart.");
       } else if (response.status === 201) {
         setMessage("Added to cart successfully!");
-      } else if (response.status === 500) {
+        setIsInCart(true);
+      } else {
         setMessage("There was an error processing your request.");
-      } else if (response.status === 203) {
-        setMessage("Please enter all fields.");
       }
     } catch (error) {
-      console.error("Error:", error); 
-      setMessage(error.response?.data?.message || "Failed to add to cart");
+      console.error("Error:", error);
+      setMessage("Failed to add to cart");
+    }
+  };
+
+  const handleRemoveFromCart = async () => {
+    if (!token) {
+      setMessage("You must be logged in to remove items from the cart.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        "http://localhost:2005/api/cart/deleteCart",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          data: { cartId: id }, 
+        }
+      );
+
+      if (response.status == 200) {
+        setIsInCart(false); 
+        setMessage("Removed from cart.");
+      } else {
+        setMessage("There was an error removing the item from the cart.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Failed to remove from cart.");
     }
   };
 
@@ -78,7 +168,7 @@ const ProductDetails = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center mt-20">
+    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center mt-25">
       <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-6 w-full max-w-5xl">
         <div className="w-full md:w-1/2 flex flex-col items-center mt-20">
           <img
@@ -90,7 +180,10 @@ const ProductDetails = () => {
 
         <div className="w-full md:w-1/2">
           <h2 className="text-3xl font-bold">{product.productName}</h2>
-          <p className="text-gray-600 mt-2">{product.productDescription}</p>
+<p className="text-gray-500 mt-1">
+Discover our high-quality products, thoughtfully designed to meet your diverse needs. With a focus on durability, reliability, and customer satisfaction, each item is crafted to provide long-lasting value, making every purchase a smart and worthwhile investment.
+</p>
+<p className="text-gray-600 mt-2">{product.productDescription}</p>
           <p className="text-red-500 font-bold text-2xl mt-2">
             ${product.productOfferPrice}
           </p>
@@ -115,14 +208,32 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex mt-6 space-x-4">
+            {!isInCart ? (
+              <button
+                className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                onClick={handleAddToCart}
+              >
+                <FaShoppingCart /> <span>Add to Cart</span>
+              </button>
+            ) : (
+              <button
+                className="flex items-center space-x-2 px-6 py-3 bg-gray-400 text-white rounded-lg"
+                onClick={handleRemoveFromCart}
+              >
+                <FaShoppingCart /> <span>Remove from Cart</span>
+              </button>
+            )}
+
             <button
-              className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              onClick={handleAddToCart}
+              className="flex items-center space-x-2 px-6 py-3 border border-gray-400 rounded-lg hover:bg-gray-200"
+              onClick={handleLikeToggle}
             >
-              <FaShoppingCart /> <span>Add to Cart</span>
-            </button>
-            <button className="flex items-center space-x-2 px-6 py-3 border border-gray-400 rounded-lg hover:bg-gray-200">
-              <FaRegHeart /> <span>Wishlist</span>
+              {isLiked ? (
+                <FaHeart className="text-red-500" />
+              ) : (
+                <FaRegHeart className="text-gray-500" />
+              )}
+              <span>Wishlist</span>
             </button>
           </div>
 
