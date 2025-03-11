@@ -35,7 +35,7 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js)** e-commerc
 ## ⚙️ Installation
 ### 1️⃣ Clone the repository
 ```sh
-git clone (https://github.com/SUKANT43/E-commerce-Mern)
+git clone https://github.com/SUKANT43/E-commerce-Mern
 cd click-and-collect
 ```
 
