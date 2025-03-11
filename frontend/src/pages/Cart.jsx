@@ -88,8 +88,8 @@ function Cart() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b">
-              <th className="py-3 px-4">Product</th>
-              <th className="py-3 px-4">Price</th>
+            <th className="py-3 px-4 w-40">Product</th>
+            <th className="py-3 px-4">Price</th>
               <th className="py-3 px-4">Quantity</th>
               <th className="py-3 px-4">Subtotal</th>
               <th className="py-3 px-4">Action</th>
@@ -98,10 +98,11 @@ function Cart() {
           <tbody>
             {cartItems.map((item) => (
               <tr key={item.cartId} className="border-b">
-                <td className="py-4 px-4 flex items-center gap-3">
-                  <img src={item.productImage} alt={item.productName} className="w-10 h-10" />
-                  {item.productName}
-                </td>
+               <td className="py-4 px-4 flex items-center gap-3">
+  <img src={item.productImage} alt={item.productName} className="w-10 h-10" />
+  <span className="truncate w-32 block" title={item.productName}>{item.productName}</span>
+</td>
+
                 <td className="py-4 px-4">${item.price}</td>
                 <td className="py-4 px-4">
                   <select

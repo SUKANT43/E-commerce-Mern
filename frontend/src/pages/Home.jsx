@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaFilter, FaSignOutAlt } from "react-icons/fa";
+import { FaFilter, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({ searchQuery }) => {
@@ -9,9 +9,10 @@ const Home = ({ searchQuery }) => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState(2000);
-  const [minPrice, setMinPrice] = useState(0); 
+  const [minPrice, setMinPrice] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
-  const [userName, setUserName] = useState(""); 
+  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const Home = ({ searchQuery }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
       if (token) {
         try {
           const response = await axios.get(
@@ -43,15 +44,29 @@ const Home = ({ searchQuery }) => {
               },
             }
           );
-          setUserName(response.data.name); 
+          setUserName(response.data.name);
+          setIsLoggedIn(true);
         } catch (err) {
           console.error("Failed to fetch user data:", err);
+          setIsLoggedIn(false);
         }
+      } else {
+        setIsLoggedIn(false);
       }
     };
 
     fetchUserData();
   }, []);
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      localStorage.removeItem("token");
+      setIsLoggedIn(false);
+      navigate("/login");
+    } else {
+      navigate("/login");
+    }
+  };
 
   const filteredProducts = products.filter((product) => {
     const searchMatch =
@@ -63,7 +78,8 @@ const Home = ({ searchQuery }) => {
       selectedCategory === "" || product.productCategory === selectedCategory;
 
     const priceMatch =
-      product.productOfferPrice <= priceRange && product.productOfferPrice >= minPrice;
+      product.productOfferPrice <= priceRange &&
+      product.productOfferPrice >= minPrice;
 
     return searchMatch && categoryMatch && priceMatch;
   });
@@ -73,19 +89,18 @@ const Home = ({ searchQuery }) => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen relative mt-25">
-      <h2 className="text-4xl font-bold text-center mb-8">Explore Our Products</h2>
+      <h2 className="text-4xl font-bold text-center mb-8">
+        Explore Our Products
+      </h2>
 
       <div className="fixed top-8 right-8 z-10 flex items-center space-x-4">
-        {userName && <span className="font-semibold text-lg">Welcome, {userName}</span>}
+        {isLoggedIn && <span className="font-semibold text-lg">Welcome, {userName}</span>}
         <button
-          onClick={() => {
-            localStorage.removeItem("token"); 
-            navigate("/login");
-          }}
+          onClick={handleAuthClick}
           className="px-4 py-2 bg-gray-200 rounded-lg shadow flex items-center space-x-2"
         >
-          <p className="font-semibold">Logout</p>
-          <FaSignOutAlt className="text-lg" />
+          <p className="font-semibold">{isLoggedIn ? "Logout" : "Login"}</p>
+          <FaUser className="text-lg" />
         </button>
       </div>
 
@@ -141,7 +156,7 @@ const Home = ({ searchQuery }) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
         {filteredProducts.map((product) => (
           <div
             key={product._id}
@@ -151,12 +166,21 @@ const Home = ({ searchQuery }) => {
             <img
               src={product.productImage || "https://via.placeholder.com/150"}
               alt={product.productName}
-              className="w-full h-50 object-cover rounded mb-4"
+              className="w-full h-80 object-cover rounded mb-4"
             />
-            <h3 className="text-lg font-semibold text-gray-800">{product.productName}</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              {product.productName.length > 30
+                ? product.productName.substring(0, 30) + "..."
+                : product.productName}
+            </h3>
+
             <p className="text-gray-600">Category: {product.productCategory}</p>
-            <p className="text-red-500 font-bold mt-2">${product.productOfferPrice}</p>
-            <p className="text-gray-500 line-through mt-1">${product.productOriginalPrice}</p>
+            <p className="text-red-500 font-bold mt-2">
+              ${product.productOfferPrice}
+            </p>
+            <p className="text-gray-500 line-through mt-1">
+              ${product.productOriginalPrice}
+            </p>
           </div>
         ))}
       </div>

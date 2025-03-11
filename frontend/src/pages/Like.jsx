@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Like() {
   const [likedProducts, setLikedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
-  const token = localStorage.getItem("token"); 
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchLikedProducts = async () => {
-      if (!token) {
-        setMessage("You must be logged in to view liked products.");
-        setLoading(false);
-        return;
-      }
+    if (!token) {
+      setMessage("You must be logged in to view liked products.");
+      setLoading(false);
+      return;
+    }
 
+    const fetchLikedProducts = async () => {
       try {
         const response = await axios.get("http://localhost:2005/api/like/getLike", {
           headers: { Authorization: `Bearer ${token}` },
@@ -41,24 +42,36 @@ function Like() {
         data: { productId },
       });
 
-      setLikedProducts((prevProducts) => prevProducts.filter((item) => item.productId !== productId));
-      setMessage("Product removed from liked items.");
+      setLikedProducts((prevProducts) =>
+        prevProducts.filter((item) => item.productId !== productId)
+      );
     } catch (error) {
       console.error("Error removing liked product:", error);
       setMessage("Failed to remove product.");
     }
   };
 
+  if (!token) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-center text-red-500 text-lg font-bold">
+          Please log in to view liked products.
+        </p>
+      </div>
+    );
+  }
+
+
   if (loading) return <p className="text-center text-lg">Loading liked products...</p>;
   if (message) return <p className="text-center text-red-500">{message}</p>;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen mt-30">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="p-6 bg-gray-100  mt-28 min-h-screen ">
+      <div className="bg-white p-6 rounded-lg shadow-lg ">
         <h2 className="text-2xl font-bold mb-4">Liked Products</h2>
 
         {likedProducts.length === 0 ? (
-          <p className="text-center text-gray-600 ">No liked products found.</p>
+          <p className="text-center text-gray-600">No liked products found.</p>
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
@@ -74,7 +87,11 @@ function Like() {
             <tbody>
               {likedProducts.map((product) => (
                 <tr key={product.productId} className="border-b">
-                  <td className="py-4 px-4">{product.productName}</td>
+<td className="py-4 px-4">
+  {product.productName.length > 20
+    ? `${product.productName.slice(0, 20)}...`
+    : product.productName}
+</td>
                   <td className="py-4 px-4">
                     <img
                       src={product.productImage || "https://via.placeholder.com/100"}

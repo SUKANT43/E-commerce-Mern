@@ -92,10 +92,14 @@ function AdminView() {
                 <img
                   src={product.productImage}
                   alt={product.productName}
-                  className="w-full h-48 object-cover rounded"
+                  className="w-full h-80 object-cover rounded"
                 />
                 <div className="mt-4">
-                  <h3 className="text-xl font-semibold">{product.productName}</h3>
+<h3 className="text-xl font-semibold">
+  {product.productName.length > 20
+    ? `${product.productName.slice(0, 20)}...`
+    : product.productName}
+</h3>
                   <p className="text-gray-700">Original Price: ${product.productOriginalPrice}</p>
                   <p className="text-green-600">Offer Price: ${product.productOfferPrice}</p>
                   <p className="text-gray-500">Category: {product.productCategory}</p>
