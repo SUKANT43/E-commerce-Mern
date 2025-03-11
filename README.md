@@ -12,6 +12,7 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js) and Cloudin
 - State management using **Context API**
 - API calls with **Axios**
 - **Tailwind CSS** for styling
+- **Cloudinary** for storing image
 
 ---
 
@@ -22,14 +23,14 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js) and Cloudin
 - **JWT** - Authentication
 - **bcryptjs** - Password hashing
 - **dotenv** - Environment variables
-
+- **Cloudinary** - Cloud Storage
+  
 ### Frontend (React.js)
 - **React.js** - Frontend framework
 - **React Router** - Navigation
 - **Context API** - State management
 - **Axios** - API requests
 - **Tailwind CSS** - Styling
--**Cloudinary** - Cloud storage
 
 ---
 
