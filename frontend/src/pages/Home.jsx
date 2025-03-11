@@ -115,7 +115,7 @@ const Home = ({ searchQuery }) => {
       </div>
 
       {showFilters && (
-        <div className="absolute right-8 top-16 bg-white p-4 rounded-lg shadow-lg w-64 z-100 fixed mt-30">
+        <div className=" right-8 top-16 bg-white p-4 rounded-lg shadow-lg w-64 z-100 fixed mt-30">
           <select
             className="w-full p-2 border rounded-md mb-3"
             value={selectedCategory}
