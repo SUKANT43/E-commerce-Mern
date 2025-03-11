@@ -23,7 +23,12 @@ function Like() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setLikedProducts(response.data);
+        if (response.data.length === 0) {
+          setMessage("No liked products found.");
+          setTimeout(() => navigate("/"), 2000); // Redirect after 2 seconds
+        } else {
+          setLikedProducts(response.data);
+        }
       } catch (error) {
         console.error("Error fetching liked products:", error);
         setMessage("Failed to fetch liked products.");
@@ -33,7 +38,7 @@ function Like() {
     };
 
     fetchLikedProducts();
-  }, [token]);
+  }, [token, navigate]);
 
   const removeLikedProduct = async (productId) => {
     try {
@@ -45,6 +50,11 @@ function Like() {
       setLikedProducts((prevProducts) =>
         prevProducts.filter((item) => item.productId !== productId)
       );
+
+      if (likedProducts.length === 1) {
+        setMessage("No liked products found.");
+        setTimeout(() => navigate("/"), 2000);
+      }
     } catch (error) {
       console.error("Error removing liked product:", error);
       setMessage("Failed to remove product.");
@@ -61,13 +71,12 @@ function Like() {
     );
   }
 
-
   if (loading) return <p className="text-center text-lg">Loading liked products...</p>;
   if (message) return <p className="text-center text-red-500">{message}</p>;
 
   return (
-    <div className="p-6 bg-gray-100  mt-28 min-h-screen ">
-      <div className="bg-white p-6 rounded-lg shadow-lg ">
+    <div className="p-6 bg-gray-100 mt-28 min-h-screen">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Liked Products</h2>
 
         {likedProducts.length === 0 ? (
@@ -87,11 +96,11 @@ function Like() {
             <tbody>
               {likedProducts.map((product) => (
                 <tr key={product.productId} className="border-b">
-<td className="py-4 px-4">
-  {product.productName.length > 20
-    ? `${product.productName.slice(0, 20)}...`
-    : product.productName}
-</td>
+                  <td className="py-4 px-4">
+                    {product.productName.length > 20
+                      ? `${product.productName.slice(0, 20)}...`
+                      : product.productName}
+                  </td>
                   <td className="py-4 px-4">
                     <img
                       src={product.productImage || "https://via.placeholder.com/100"}
