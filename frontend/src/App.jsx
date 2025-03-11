@@ -26,15 +26,34 @@ import About from "./pages/About";
 
 function AppContent() {
   const location = useLocation();
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const adminRoutes = ["/admin-add-product", "/admin-view", "/admin-order", "/admin-shipping", "/admin", "/seller-login", "/seller-signup", "/seller-reset-password"];
-  const sellerRoutes = ["/seller-login", "/seller-signup", "/seller-reset-password"];
+  const adminRoutes = [
+    "/admin-add-product",
+    "/admin-view",
+    "/admin-order",
+    "/admin-shipping",
+    "/admin",
+    "/seller-login",
+    "/seller-signup",
+    "/seller-reset-password",
+    "/edit/:id",
+  ];
+  const sellerRoutes = [
+    "/seller-login",
+    "/seller-signup",
+    "/seller-reset-password",
+    "/edit/:id",
+  ];
+
+  const isAdminPage = adminRoutes.includes(location.pathname);
+  const isSellerPage = sellerRoutes.includes(location.pathname);
+  const isEditProductPage = location.pathname.startsWith("/edit/");
 
   return (
     <>
-      {!adminRoutes.includes(location.pathname) &&<NavBar setSearchQuery={setSearchQuery} />} 
-      {adminRoutes.includes(location.pathname) && !sellerRoutes.includes(location.pathname) && <SellerNavBar />}
+      {!isAdminPage && !isEditProductPage && <NavBar setSearchQuery={setSearchQuery} />}
+      {(isAdminPage || isEditProductPage) && !isSellerPage && <SellerNavBar />}
 
       <Routes>
         <Route path="user-login" element={<UserLogin />} />
@@ -42,7 +61,7 @@ function AppContent() {
         <Route path="seller-login" element={<AdminLogin />} />
         <Route path="seller-signup" element={<AdminSignup />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="/" element={<Home searchQuery={searchQuery} />} /> 
+        <Route path="/" element={<Home searchQuery={searchQuery} />} />
         <Route path="like" element={<Like />} />
         <Route path="product-page" element={<ProductPage />} />
         <Route path="demo" element={<Demo />} />
@@ -57,13 +76,14 @@ function AppContent() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="contact" element={<Contact />} />
         <Route path="about" element={<About />} />
-
       </Routes>
 
-      {!adminRoutes.includes(location.pathname) && <Footer />}
+      {!isAdminPage && !isEditProductPage && <Footer />}
     </>
   );
 }
+
+
 
 function App() {
   return (
