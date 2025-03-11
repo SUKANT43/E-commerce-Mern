@@ -1,7 +1,7 @@
 # 🛒 Click and Collect - MERN E-Commerce Website
 
 ## 🚀 Overview
-This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js)** e-commerce website called **Click and Collect**. This project includes a **Seller Dashboard** but does not include an order button.
+This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js) and Cloudinary** e-commerce website called **Click and Collect**. This project includes a **Seller Dashboard** but does not include an order button.
 
 ## 📌 Features
 - User authentication (Register/Login) with JWT
@@ -29,6 +29,7 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js)** e-commerc
 - **Context API** - State management
 - **Axios** - API requests
 - **Tailwind CSS** - Styling
+- - **Cloudinary** - Cloud storage
 
 ---
 
