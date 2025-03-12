@@ -34,6 +34,21 @@ This is a full-stack **MERN (MongoDB, Express.js, React.js, Node.js) and Cloudin
 
 ---
 
+### Demo Images
+
+### User Page:
+![Screenshot 2025-03-12 190227](https://github.com/user-attachments/assets/e90cec61-fb8a-4dd1-8839-8cbde442fce3)
+![Screenshot 2025-03-12 190238](https://github.com/user-attachments/assets/c0bcb990-dd18-4416-99f8-d4536ec84e1e)
+![Screenshot 2025-03-12 190250](https://github.com/user-attachments/assets/4b3ecf16-8929-49c3-9b98-cf25aee4b8b5)
+![Screenshot 2025-03-12 190314](https://github.com/user-attachments/assets/c252234d-79d5-40e5-a10f-248d105f5085)
+
+### Seller Page:
+![Screenshot 2025-03-12 190046](https://github.com/user-attachments/assets/4a30eefd-5c55-46b9-892c-8269044f76f0)
+![Screenshot 2025-03-12 190107](https://github.com/user-attachments/assets/3e45c669-b2ce-46b5-91aa-b1ca70047b36)
+![Screenshot 2025-03-12 190123](https://github.com/user-attachments/assets/0a2b752b-ce76-45d7-82cf-47c416f43118)
+![Screenshot 2025-03-12 190136](https://github.com/user-attachments/assets/cff4ad31-1b4e-4817-8e59-72a19bf7d72b)
+
+---
 ## ⚙️ Installation
 ### 1️⃣ Clone the repository
 ```sh
