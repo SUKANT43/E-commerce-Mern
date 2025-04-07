@@ -23,7 +23,7 @@ import Contact from "./pages/Contact";
 import NavBar from "./components/NavBar";
 import { useState } from "react"; 
 import About from "./pages/About";
-
+import UserProfile from "./pages/UserProfile";
 function AppContent() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,6 +76,7 @@ function AppContent() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="contact" element={<Contact />} />
         <Route path="about" element={<About />} />
+        <Route path="userProfile" element={<UserProfile />} />
       </Routes>
 
       {!isAdminPage && !isEditProductPage && <Footer />}

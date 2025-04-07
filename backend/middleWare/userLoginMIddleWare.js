@@ -1,29 +1,55 @@
-const userLoginModel=require('../model/userModel')
-const jwt=require('jsonwebtoken')
+const userLoginModel = require('../model/userModel');
+const jwt = require('jsonwebtoken');
 
-const protect=async(req,res,next)=>{
+const protect = async (req, res, next) => {
     let token;
-        try{
-            if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-                token=req.headers.authorization.split(" ")[1]
-                const decode=jwt.verify(token,process.env.JWT_SECRET)
-                req.user=await userLoginModel.findById(decode.id).select("-password")
-                if(!req.user){
-                    return res.status(200).json({msg:"user not found"}) 
-                }
-                console.log(req.user.name)
-                next()
-            }
-            else{
-                return res.status(200).json({msg:"no token"}) 
+    // Check for token in Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            // Get token from header
+            token = req.headers.authorization.split(' ')[1];
 
+            // Verify token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            
+            // Get user from database (excluding password)
+            req.user = await userLoginModel.findById(decoded.id).select('-password');
+            console.log("hello")
+
+
+            if (!req.user) {
+                return res.status(401).json({ 
+                    success: false,
+                    msg: 'User not found - token invalid' 
+                });
             }
+            
+            // Continue to next middleware
+            next();
+        } catch (error) {
+            // Handle specific JWT errors
+            let message = 'Not authorized';
+            
+            if (error.name === 'JsonWebTokenError') {
+                message = 'Invalid token';
+            } else if (error.name === 'TokenExpiredError') {
+                message = 'Token expired';
+            }
+            
+            return res.status(401).json({ 
+                success: false,
+                msg: message,
+                error: error.message 
+            });
         }
-        catch(e){
-            return res.status(400).json({msg:e.message})
-        }
-        if(!token){
-            return  res.status(200).json({msg:"enter the jsonwebtoken"})
-        }
-}
-module.exports={protect}
+    }
+    
+    if (!token) {
+        return res.status(401).json({ 
+            success: false,
+            msg: 'No token provided - authorization denied' 
+        });
+    }
+};
+
+module.exports = { protect };

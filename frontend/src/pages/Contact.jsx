@@ -3,8 +3,8 @@ import { FaEnvelope, FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
 
 function Contact() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6 ">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full text-center mb-20">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Contact Me</h1>
         <p className="text-gray-600 mb-6">Feel free to reach out through any of the platforms below:</p>
 

@@ -75,7 +75,7 @@ function Like() {
   if (message) return <p className="text-center text-red-500">{message}</p>;
 
   return (
-    <div className="p-6 bg-gray-100 mt-28 min-h-screen">
+    <div className="p-6 bg-gray-100  min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Liked Products</h2>
 

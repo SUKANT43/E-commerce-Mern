@@ -168,7 +168,7 @@ const ProductDetails = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center mt-28">
+    <div className="p-8 bg-gray-100 min-h-screen flex items-center justify-center ">
       <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row gap-6 w-full max-w-5xl">
         <div className="w-full md:w-1/2 flex flex-col items-center mt-20">
           <img

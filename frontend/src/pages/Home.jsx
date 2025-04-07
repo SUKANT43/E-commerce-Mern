@@ -88,7 +88,7 @@ const Home = ({ searchQuery }) => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen relative mt-25">
+    <div className="p-8 bg-gray-100 min-h-screen relative">
       <h2 className="text-4xl font-bold text-center mb-8">
         Explore Our Products
       </h2>

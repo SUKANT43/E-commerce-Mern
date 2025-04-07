@@ -74,7 +74,7 @@ function Cart() {
 
   if (!token || cartItems.length === 0) {
     return (
-      <div className="p-6 bg-gray-100 min-h-screen mt-30 flex flex-col items-center justify-center">
+      <div className="p-6 bg-gray-100 min-h-screen  flex flex-col items-center justify-center">
         <h2 className="text-xl font-semibold mb-4">Your cart is empty</h2>
         {!token && <p className="text-red-500">Please log in to view your cart.</p>}
         <Link to="/" className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg">Return to Shop</Link>
@@ -83,7 +83,7 @@ function Cart() {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen mt-30">
+    <div className="p-6 bg-gray-100 min-h-screen ">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <table className="w-full text-left border-collapse">
           <thead>

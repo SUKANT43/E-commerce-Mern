@@ -2,93 +2,199 @@ import React, { useState, useEffect } from "react";
 import { FaSearch, FaHeart, FaShoppingCart, FaUserCircle, FaBars, FaTimes, FaSignOutAlt } from "react-icons/fa";
 import icon from "../assets/c&c.png"; 
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function NavBar({ setSearchQuery }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [search, setSearch] = useState(""); 
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToken(localStorage.getItem("token")); // Update token when it changes
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const storedToken = localStorage.getItem("token");
+        setToken(storedToken);
+        
+        if (storedToken) {
+          const response = await axios.get("http://localhost:2005/api/userLogin/me", {
+            headers: {
+              Authorization: `Bearer ${storedToken}`
+            }
+          });
+          setUserName(response.data.name);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        if (error.response?.status === 401) {
+          localStorage.removeItem("token");
+          setToken(null);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [token]); // Add token as dependency
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setToken(null); // Update state to reflect logout
+    setToken(null);
+    setUserName("");
+    toast.success("Logged out successfully");
     navigate("/user-login");
   };
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
-    setSearchQuery(e.target.value); 
+    const value = e.target.value;
+    setSearch(value);
+    setSearchQuery(value); 
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
-    <div className="m-0 relative z-50">
-      <div className="w-full bg-black text-slate-300 text-center py-2 fixed top-0 left-0 z-50 text-sm md:text-base">
+    <header className="sticky top-0 z-50 bg-white shadow-sm m">
+      {/* Announcement Bar */}
+      <div className="w-full bg-black text-slate-300 text-center py-2 text-sm md:text-base">
         <p>
           Summer Sale For All Products and Free Delivery - Upto 50% OFF!
-          <span className="text-white font-bold ml-2 underline cursor-pointer">Shop Now</span>
+          <span className="text-white font-bold ml-2 underline cursor-pointer hover:text-amber-300 transition-colors">
+            Shop Now
+          </span>
         </p>
       </div>
 
-      <div className="fixed top-9 left-0 right-0 flex items-center justify-between px-4 md:px-6 py-0 shadow-md bg-white z-40">
-        <div className="flex items-center gap-3">
-          <img src={icon} className="w-14 h-14 md:w-20 md:h-20 cursor-pointer" alt="Logo" />
-          <h1 className="text-xl md:text-2xl font-extrabold tracking-wide text-gray-800 cursor-pointer">C&C</h1>
+      {/* Main Navigation */}
+      <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <Link to="/" className="flex items-center gap-3">
+            <img src={icon} className="w-12 h-12 md:w-16 md:h-16" alt="C&C Logo" />
+            <h1 className="text-xl md:text-2xl font-extrabold tracking-wide text-gray-800">C&C</h1>
+          </Link>
         </div>
 
-        <div className="md:hidden text-2xl cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
+        {/* Mobile Menu Button */}
+        <button 
+          className="md:hidden text-2xl text-gray-700 focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
           {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Navigation Links */}
+        <div className={`absolute md:relative top-full left-0 w-full md:w-auto bg-white md:bg-transparent shadow-lg md:shadow-none md:flex items-center gap-6 text-lg font-medium px-4 py-3 md:py-0 transition-all duration-300 ease-in-out ${menuOpen ? "block" : "hidden"}`}>
+          <Link 
+            to="/" 
+            className="block md:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 hover:text-black transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link 
+            to="/contact" 
+            className="block md:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 hover:text-black transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </Link>
+          <Link 
+            to="/about" 
+            className="block md:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 hover:text-black transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+          {!token && (
+            <Link 
+              to="/user-login" 
+              className="block md:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 hover:text-black transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
-        <div className={`absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none md:flex gap-8 text-lg font-semibold px-4 md:px-0 transition-all duration-300 ${menuOpen ? "block" : "hidden"}`}>
-          <Link to="/" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Home</Link>
-          <Link to="/contact" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Contact</Link>
-          <Link to="/about" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">About</Link>
-          {!token ? (
-            <Link to="/user-login" className="cursor-pointer px-4 py-2 rounded-xl transition-all duration-300 hover:bg-black hover:text-white">Sign In</Link>
-          ) : null}
-        </div>
-
-        <div className="hidden md:flex items-center border border-gray-300 rounded-lg px-4 py-2 w-64 md:w-80 lg:w-96 ml-[-40px]">
+        {/* Search Bar - Desktop */}
+        <div className="hidden md:flex items-center border border-gray-300 rounded-lg px-4 py-2 flex-1 max-w-xl mx-6">
           <input
             type="text"
             placeholder="What are you looking for?"
-            className="outline-none px-2 py-1 w-full"
+            className="outline-none w-full px-2 py-1 text-gray-700"
             value={search}
             onChange={handleSearch} 
           />
-          <FaSearch className="text-gray-500 ml-2 cursor-pointer" />
+          <FaSearch className="text-gray-500 ml-2 cursor-pointer hover:text-black transition-colors" />
         </div>
 
-        <div className="hidden md:flex items-center gap-6 md:gap-8 text-xl md:text-2xl relative">
-          <Link to="/like"><FaHeart className="text-red-500 cursor-pointer" /></Link> 
-          <Link to="/cart"><FaShoppingCart className="text-blue-500 cursor-pointer" /></Link>
+        {/* Icons Section */}
+        <div className="hidden md:flex items-center gap-6 text-2xl">
+          <Link to="/like" className=" text-red-500 hover:transition-colors ">
+            <FaHeart />
+          </Link> 
+          <Link to="/cart" className="text-blue-500 ">
+            <FaShoppingCart />
+          </Link>
 
-          {token ? (
+          {token && (
             <div className="relative">
-              <FaUserCircle 
-                className="text-gray-600 cursor-pointer"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              />
+              <button 
+                onClick={toggleDropdown}
+                className="flex items-center gap-1 text-gray-600 hover:text-black transition-colors focus:outline-none"
+                aria-label="User menu"
+              >
+                <FaUserCircle />
+                {userName && <span className="text-sm ml-1"></span>}
+              </button>
 
               {dropdownOpen && (
-                <div className="absolute top-10 right-0 bg-white shadow-md rounded-md z-50">
-                  <button 
-                    onClick={handleLogout} 
-                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 w-full">
-                    <FaSignOutAlt /> Logout
-                  </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                  <div className="py-1">
+                    <p className="block px-4 py-2 text-sm text-gray-700 border-b">
+                      Hi, {userName}
+                    </p>
+                    <Link
+                      to="/userProfile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FaSignOutAlt className="mr-2" /> Logout
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
-          ) : null}
+          )}
         </div>
-      </div>
-    </div>
+
+        {/* Mobile Search - Only shown when menu is open */}
+        {menuOpen && (
+          <div className="md:hidden w-full mt-3 flex items-center border border-gray-300 rounded-lg px-4 py-2">
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="outline-none w-full px-2 py-1"
+              value={search}
+              onChange={handleSearch} 
+            />
+            <FaSearch className="text-gray-500 ml-2 cursor-pointer" />
+          </div>
+        )}
+      </nav>
+    </header>
   );
 }
 
