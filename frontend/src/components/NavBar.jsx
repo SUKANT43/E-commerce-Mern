@@ -167,6 +167,9 @@ function NavBar({ setSearchQuery }) {
                     >
                       My Profile
                     </Link>
+                    <p className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
+                    <Link to="/orders">My Orders</Link>  
+                      </p>
                     <button
                       onClick={handleLogout}
                       className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

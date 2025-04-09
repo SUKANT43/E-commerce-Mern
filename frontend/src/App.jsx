@@ -24,6 +24,7 @@ import NavBar from "./components/NavBar";
 import { useState } from "react"; 
 import About from "./pages/About";
 import UserProfile from "./pages/UserProfile";
+import Orders from './pages/Orders'
 function AppContent() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,6 +78,7 @@ function AppContent() {
         <Route path="contact" element={<Contact />} />
         <Route path="about" element={<About />} />
         <Route path="userProfile" element={<UserProfile />} />
+        <Route path="orders" element={<Orders/>}/>
       </Routes>
 
       {!isAdminPage && !isEditProductPage && <Footer />}

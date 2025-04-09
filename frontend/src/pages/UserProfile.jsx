@@ -12,7 +12,8 @@ const UserProfile = () => {
     street: '',
     city: '',
     district: '',
-    state: ''
+    state: '',
+    number:''
   });
 
   const navigate = useNavigate();
@@ -33,7 +34,8 @@ const UserProfile = () => {
             street: data.street || '',
             city: data.city || '',
             district: data.district || '',
-            state: data.state || ''
+            state: data.state || '',
+            number:data.number||''
           });
         }
       } catch (err) {
@@ -82,7 +84,7 @@ const UserProfile = () => {
         });
 
         setUserData(null);
-        setFormData({ doorNo: '', street: '', city: '', district: '', state: '' });
+        setFormData({ doorNo: '', street: '', city: '', district: '', state: '',number:'' });
         setError('');
       } catch (err) {
         setError(err.response?.data?.msg || 'Failed to delete address');
@@ -112,7 +114,7 @@ const UserProfile = () => {
         <>
           {isEditing ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {['doorNo', 'street', 'city', 'district', 'state'].map((field) => (
+              {['doorNo', 'street', 'city', 'district', 'state','number'].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 capitalize">{field}</label>
                   <input
@@ -135,6 +137,7 @@ const UserProfile = () => {
             <div className="space-y-4">
               <div className="p-4 border border-gray-200 rounded-md">
                 <h3 className="font-semibold text-lg mb-2">Your Address</h3>
+                <p>{userData.number}</p>
                 <p>{userData.doorNo}, {userData.street}</p>
                 <p>{userData.city}, {userData.district}</p>
                 <p>{userData.state}</p>

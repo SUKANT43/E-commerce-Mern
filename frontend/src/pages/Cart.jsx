@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -93,6 +93,8 @@ function Cart() {
               <th className="py-3 px-4">Quantity</th>
               <th className="py-3 px-4">Subtotal</th>
               <th className="py-3 px-4">Action</th>
+              <th className="py-3 px-4">Make Order</th>
+
             </tr>
           </thead>
           <tbody>
@@ -124,6 +126,14 @@ function Cart() {
                     className="text-red-600 hover:text-red-800"
                   >
                     <FaTrash className="cursor-pointer" />
+                  </button>
+                  
+                </td>
+                <td>
+                   <button
+                    className="text-red-600 hover:text-red-800 ml-8"
+                  >
+                    <FaShoppingBag className="cursor-pointer" />
                   </button>
                 </td>
               </tr>
