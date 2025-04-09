@@ -2,9 +2,9 @@ const userLoginModel = require('../model/userLoginModel');
 
 const newUserData = async (req, res) => {
     try {
-        const { doorNo, street, city, district, state } = req.body;
+        const { doorNo, street, city, district, state,number } = req.body;
 
-        if (!doorNo || !street || !city || !district || !state) {
+        if (!doorNo || !street || !city || !district || !state|| !number) {
             return res.status(400).json({ msg: "Please enter all fields" });
         }
 
@@ -21,7 +21,8 @@ const newUserData = async (req, res) => {
             street,
             city,
             district,
-            state
+            state,
+            number
         });
 
         return res.status(201).json({ newData });
@@ -32,9 +33,9 @@ const newUserData = async (req, res) => {
 
 const editUserData = async (req, res) => {
     try {
-        const { doorNo, street, city, district, state } = req.body;
+        const { doorNo, street, city, district, state,number } = req.body;
 
-        if (!doorNo || !street || !city || !district || !state) {
+        if (!doorNo || !street || !city || !district || !state||!number) {
             return res.status(400).json({ msg: "Please enter all fields" });
         }
 

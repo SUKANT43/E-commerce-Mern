@@ -10,6 +10,10 @@ const schema= mongoose.Schema({
         type:String,
         required:[true,"please enter the name"]
     },
+    number:{
+        type:String,
+        required:[true,"please enter the number"]
+    },
         doorNo:{
             type:String,
             required:[true,"please enter the door No"]
