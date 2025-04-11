@@ -43,7 +43,6 @@ exports.getOrderById = async (req, res) => {
     }
 };
 
-// Update an order
 exports.updateOrder = async (req, res) => {
     try {
         const { quantity, price } = req.body;
