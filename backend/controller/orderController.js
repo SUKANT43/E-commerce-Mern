@@ -60,7 +60,6 @@ exports.updateOrder = async (req, res) => {
     }
 };
 
-// Delete an order
 exports.deleteOrder = async (req, res) => {
     try {
         const deletedOrder = await Order.findByIdAndDelete(req.params.id);
