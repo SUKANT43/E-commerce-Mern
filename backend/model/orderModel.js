@@ -1,28 +1,36 @@
-const mongoose=requrie('mongoose')
+const mongoose = require('mongoose');
 
-const schema=new mongoose.Schema({
-    userId:{
-
+const schema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'userlogin', 
     },
-    productId:{
-
+    productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product', 
     },
-    sellerId:{
-
+    sellerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Sellerlogin', 
     },
-    quantity:{
-
+    quantity: {
+        type: Number,
     },
-    price:{
-
+    price: {
+        type: Number,
     },
-    Address:{
-        name:{type:String},
-        doorno:{type:String},
-        city:{type:String},
-        district:{type:String},
-        state:{type:String},
+    AddressId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'sellerprofile', 
     },
-})
+    isConfirmed: {
+        type: Boolean,
+        default: false, // Order is not confirmed by default
+    },
+    isCancelled: {
+        type: Boolean,
+        default: false, // Order is not cancelled by default
+    }
+});
 
-module.exports=mongoose.Model('orderData',schema);
+module.exports = mongoose.model('orderData', schema);
