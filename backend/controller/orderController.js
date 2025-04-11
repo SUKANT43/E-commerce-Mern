@@ -71,12 +71,11 @@ exports.deleteOrder = async (req, res) => {
     }
 };
 
-// Confirm an order
 exports.confirmOrder = async (req, res) => {
     try {
         const order = await Order.findByIdAndUpdate(
             req.params.id,
-            { isConfirmed: true, isCancelled: false }, // Ensure it's not cancelled
+            { isConfirmed: true, isCancelled: false }, 
             { new: true }
         );
 
@@ -88,12 +87,11 @@ exports.confirmOrder = async (req, res) => {
     }
 };
 
-// Cancel an order
 exports.cancelOrder = async (req, res) => {
     try {
         const order = await Order.findByIdAndUpdate(
             req.params.id,
-            { isCancelled: true, isConfirmed: false }, // Ensure it's not confirmed
+            { isCancelled: true, isConfirmed: false }, 
             { new: true }
         );
 
