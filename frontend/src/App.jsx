@@ -16,7 +16,6 @@ import AdminView from "./pages/AdminView";
 import AdminOrder from "./pages/AdminOrder";
 import AdminShipping from "./pages/AdminShipping";
 import SellerNavBar from "./components/SellerNavBar";
-import ErrorBoundary from "./pages/ErrorBoundary";
 import EditProduct from "./pages/EditProduct";
 import ProductDetails from "./pages/ProductDetails";
 import Contact from "./pages/Contact";
