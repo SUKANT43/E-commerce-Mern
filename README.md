@@ -94,6 +94,8 @@ npm start
 ---
 
 ## 📂 Project Structure
+```plaintext
+
 click-and-collect/
 │── backend/
 │   ├── config/
@@ -111,8 +113,8 @@ click-and-collect/
 │   ├── main.jsx
 │   ├── index.css
 
+```
 
----
 
 ## 📜 API Endpoints
 ### 🔹 User Routes (/api/user)
