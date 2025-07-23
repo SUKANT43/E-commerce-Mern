@@ -64,11 +64,14 @@ cd backend
 npm install
 
 # Create a .env file in backend/ and add:
--env
--PORT=5000
--MONGO_URL=mongodb://localhost:27017/clickandcollect
--JWT_SECRET=your_jwt_secret
--Cloudinary_Key=SWWW DWWE WEDWE WED
+```plaintext
+
+ env
+ PORT=5000
+ MONGO_URL=mongodb://localhost:27017/clickandcollect
+ JWT_SECRET=your_jwt_secret
+ Cloudinary_Key=SWWW DWWE WEDWE WED
+```
 
 - Start the backend server:
 sh
