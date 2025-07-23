@@ -63,7 +63,7 @@ sh
 cd backend
 npm install
 
-- Create a .env file in backend/ and add:
+# Create a .env file in backend/ and add:
 -env
 -PORT=5000
 -MONGO_URL=mongodb://localhost:27017/clickandcollect
